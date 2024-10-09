@@ -42,13 +42,13 @@ fun RowScope.ComposeSignUpBarItem(
     NavigationBarItem(
         modifier = modifier,
         selected = selected,
-        onClick = { onClick.invoke() },
-        icon = { Icons.Rounded.Home},
+        onClick = {
+            onClick.invoke()
+                  },
+        icon = if (selected) selectedIcon else icon,
         enabled = enabled,
         alwaysShowLabel = alwaysShowLabel,
-        label = {
-            Text(text = "For You Testing")
-        },
+        label = label
         )
 
 }

@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination
@@ -17,6 +20,7 @@ import com.example.composesignup.core.navigation.ComposeSignUpNavHost
 import com.example.composesignup.core.navigation.ComposeSignUpState
 import com.example.composesignup.core.navigation.TopLevelDestinations
 
+private const val Tag = "ComposeSignUpApp"
 @Composable
 fun ComposeSignUpApp(
     appState:ComposeSignUpState,
@@ -39,7 +43,8 @@ internal fun ComposeSignUp(
             destinations = appState.topLevelDestinations,
             currentDestination = appState.currentDestination,
             modifier = modifier,
-            onNavigateToDestination = appState::navigateToTopLevelDestination
+            onNavigateToDestination = appState::navigateToTopLevelDestination,
+            appState = appState
         )
     }) {
         Log.d("scaffold", "ComposeSignUpApp() called...$it")
@@ -54,29 +59,42 @@ internal fun ComposeSignUp(
 
 @Composable
 private fun ComposeSignUpBottomBar(
+    modifier: Modifier,
     destinations: List<TopLevelDestinations>,
+    appState: ComposeSignUpState,
     currentDestination:NavDestination?,
     onNavigateToDestination:(TopLevelDestinations)->Unit,
-    modifier: Modifier
 ){
     ComposeSignUpNavigationBar(modifier = modifier.fillMaxWidth()) {
-        destinations.forEach {destination->
-            Log.d("ComposeSignUpNavigation", "ComposeSignUpBottomBar() called with: destination = $destination,${currentDestination?.route}")
-            val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
-            Log.d("ComposeSignUpNavigation", "ComposeSignUpBottomBar() called with: destination = $selected")
+        destinations.onEachIndexed { index, topLevelDestination ->
+            Log.d(
+                Tag,
+                "ComposeSignUpBottomBar() called with: index = $index, topLevelDestination = $topLevelDestination, route = ${currentDestination?.route}",
 
+            )
             ComposeSignUpBarItem(
-                selected = selected,
-                onClick = {
-                    onNavigateToDestination.invoke(destination)
+                selected = (currentDestination?.route==appState.currentDestination?.route),
+                icon = {
+                    Icon(
+                        imageVector = destinations[index].selectedIcon,
+                        contentDescription = destinations[index].title
+                    )
                 },
-                icon = { Icons.Default.AccountCircle },
+                selectedIcon = {
+                    Icon(
+                        imageVector = destinations[index].unselectedIcon,
+                        contentDescription = topLevelDestination.title
+                    )
+                },
                 label = {
-                    destination.title
-                })
+                    Text(topLevelDestination.title)
+                },
+                onClick = {
+                    onNavigateToDestination.invoke(topLevelDestination)
+                }
+            )
         }
     }
-
 }
 private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestinations) =
     this?.hierarchy?.any {
