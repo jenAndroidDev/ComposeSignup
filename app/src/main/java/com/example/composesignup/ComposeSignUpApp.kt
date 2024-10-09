@@ -65,15 +65,17 @@ private fun ComposeSignUpBottomBar(
     currentDestination:NavDestination?,
     onNavigateToDestination:(TopLevelDestinations)->Unit,
 ){
+    val isSelected = TopLevelDestinations.entries.any {
+        it.route==currentDestination?.route
+    }
     ComposeSignUpNavigationBar(modifier = modifier.fillMaxWidth()) {
         destinations.onEachIndexed { index, topLevelDestination ->
             Log.d(
                 Tag,
                 "ComposeSignUpBottomBar() called with: index = $index, topLevelDestination = $topLevelDestination, route = ${currentDestination?.route}",
-
             )
             ComposeSignUpBarItem(
-                selected = (currentDestination?.route==appState.currentDestination?.route),
+                selected = (appState.currentDestination?.route==topLevelDestination.route),
                 icon = {
                     Icon(
                         imageVector = destinations[index].selectedIcon,

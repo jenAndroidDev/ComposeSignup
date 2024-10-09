@@ -36,7 +36,7 @@ fun RowScope.ComposeSignUpBarItem(
     enabled:Boolean = true,
     alwaysShowLabel:Boolean =true,
     icon:@Composable ()->Unit,
-    selectedIcon:@Composable ()->Unit = icon,
+    selectedIcon:@Composable ()->Unit,
     label: @Composable (()->Unit)?=null
 ){
     NavigationBarItem(

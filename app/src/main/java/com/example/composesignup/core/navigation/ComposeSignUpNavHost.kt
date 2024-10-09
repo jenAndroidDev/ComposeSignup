@@ -26,9 +26,7 @@ fun ComposeSignUpNavHost(
     NavHost(navController = navController,
         startDestination = startDestination,
         modifier = modifier){
-        forYouScreen{
-            appState.navigateToDetailScreen()
-        }
+        forYouScreen{ appState.navigateToDetailScreen() }
         searchScreen()
         detailScreen()
     }

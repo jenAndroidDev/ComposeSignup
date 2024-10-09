@@ -5,8 +5,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import com.example.composesignup.R
 import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
+import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
+import com.example.composesignup.feature.search.navigation.SEARCH_ROUTE
 
 enum class TopLevelDestinations(
+    val route:String,
     val title:String,
     val selectedIcon:ImageVector,
     val unselectedIcon:ImageVector,
@@ -14,11 +17,13 @@ enum class TopLevelDestinations(
     FOR_YOU(
         title = "For You",
         selectedIcon = ComposeSignUpIcons.HomeSelected,
-        unselectedIcon = ComposeSignUpIcons.HomeUnSelected
+        unselectedIcon = ComposeSignUpIcons.HomeUnSelected,
+        route = FOR_YOU_ROUTE
         ),
     SEARCH(
-        title = "Accounts",
+        title = "Search",
         selectedIcon = ComposeSignUpIcons.AccountSelected,
-        unselectedIcon = ComposeSignUpIcons.AccountUnSelected
+        unselectedIcon = ComposeSignUpIcons.AccountUnSelected,
+        route = SEARCH_ROUTE
     )
 }
