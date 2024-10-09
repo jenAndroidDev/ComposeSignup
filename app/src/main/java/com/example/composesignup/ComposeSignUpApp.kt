@@ -65,36 +65,38 @@ private fun ComposeSignUpBottomBar(
     currentDestination:NavDestination?,
     onNavigateToDestination:(TopLevelDestinations)->Unit,
 ){
-    val isSelected = TopLevelDestinations.entries.any {
+    val isTopLevelDestination = TopLevelDestinations.entries.any {
         it.route==currentDestination?.route
     }
-    ComposeSignUpNavigationBar(modifier = modifier.fillMaxWidth()) {
-        destinations.onEachIndexed { index, topLevelDestination ->
-            Log.d(
-                Tag,
-                "ComposeSignUpBottomBar() called with: index = $index, topLevelDestination = $topLevelDestination, route = ${currentDestination?.route}",
-            )
-            ComposeSignUpBarItem(
-                selected = (appState.currentDestination?.route==topLevelDestination.route),
-                icon = {
-                    Icon(
-                        imageVector = destinations[index].selectedIcon,
-                        contentDescription = destinations[index].title
-                    )
-                },
-                selectedIcon = {
-                    Icon(
-                        imageVector = destinations[index].unselectedIcon,
-                        contentDescription = topLevelDestination.title
-                    )
-                },
-                label = {
-                    Text(topLevelDestination.title)
-                },
-                onClick = {
-                    onNavigateToDestination.invoke(topLevelDestination)
-                }
-            )
+    if (isTopLevelDestination) {
+        ComposeSignUpNavigationBar(modifier = modifier.fillMaxWidth()) {
+            destinations.onEachIndexed { index, topLevelDestination ->
+                Log.d(
+                    Tag,
+                    "ComposeSignUpBottomBar() called with: index = $index, topLevelDestination = $topLevelDestination, route = ${currentDestination?.route}",
+                )
+                ComposeSignUpBarItem(
+                    selected = (appState.currentDestination?.route == topLevelDestination.route),
+                    icon = {
+                        Icon(
+                            imageVector = destinations[index].selectedIcon,
+                            contentDescription = destinations[index].title
+                        )
+                    },
+                    selectedIcon = {
+                        Icon(
+                            imageVector = destinations[index].unselectedIcon,
+                            contentDescription = topLevelDestination.title
+                        )
+                    },
+                    label = {
+                        Text(topLevelDestination.title)
+                    },
+                    onClick = {
+                        onNavigateToDestination.invoke(topLevelDestination)
+                    }
+                )
+            }
         }
     }
 }
