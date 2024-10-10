@@ -24,11 +24,13 @@ private const val Tag = "ComposeSignUpApp"
 @Composable
 fun ComposeSignUpApp(
     appState:ComposeSignUpState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    startDestination:String = ""
     ){
     ComposeSignUp(
         appState = appState,
-        modifier = modifier
+        modifier = modifier,
+        startDestination = startDestination
     )
 }
 
@@ -36,6 +38,7 @@ fun ComposeSignUpApp(
 internal fun ComposeSignUp(
     appState: ComposeSignUpState,
     modifier: Modifier,
+    startDestination: String = "",
     variance: String = "Default",
 ) {
     Scaffold(bottomBar = {
@@ -51,10 +54,11 @@ internal fun ComposeSignUp(
         Column(modifier = modifier.fillMaxSize()) {
             ComposeSignUpNavHost(
                 modifier = modifier,
-                appState = appState)
+                appState = appState,
+                startDestination = startDestination
+                )
         }
     }
-
 }
 
 @Composable

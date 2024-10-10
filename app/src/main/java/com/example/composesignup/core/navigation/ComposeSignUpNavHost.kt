@@ -11,6 +11,7 @@ import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.example.composesignup.feature.foryou.navigation.forYouScreen
 import com.example.composesignup.feature.search.navigation.SEARCH_ROUTE
 import com.example.composesignup.feature.search.navigation.searchScreen
+import com.example.composesignup.feature.welcome.navigation.welcomeScreen
 
 /*
 * All */
@@ -18,7 +19,7 @@ import com.example.composesignup.feature.search.navigation.searchScreen
 fun ComposeSignUpNavHost(
     modifier: Modifier,
     appState: ComposeSignUpState,
-    startDestination:String = FOR_YOU_ROUTE
+    startDestination:String
 
 ){
     val navController = appState.navController
@@ -26,7 +27,12 @@ fun ComposeSignUpNavHost(
     NavHost(navController = navController,
         startDestination = startDestination,
         modifier = modifier){
-        forYouScreen{ appState.navigateToDetailScreen() }
+        welcomeScreen{
+            appState.navigateToTopLevelDestination(TopLevelDestinations.FOR_YOU)
+        }
+        forYouScreen{
+            appState.navigateToDetailScreen()
+        }
         searchScreen()
         detailScreen()
     }

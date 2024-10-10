@@ -1,6 +1,5 @@
 package com.example.composesignup.core.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
@@ -58,7 +57,7 @@ class ComposeSignUpState(
         val topLevelNavOptions = navOptions {
 
             popUpTo(navController.graph.findStartDestination().id){
-                saveState = true
+                saveState = false
             }
             launchSingleTop = true
             restoreState = true
@@ -75,4 +74,5 @@ class ComposeSignUpState(
     }
 
     fun navigateToDetailScreen() = navController.navigateDetails()
+
 }

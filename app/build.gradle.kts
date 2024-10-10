@@ -68,8 +68,11 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
+    //navigation
     implementation(libs.androidx.navigation)
     implementation(libs.hilt.navigation)
+    //dataStore
+    implementation(libs.androidx.datastore)
 
 
 

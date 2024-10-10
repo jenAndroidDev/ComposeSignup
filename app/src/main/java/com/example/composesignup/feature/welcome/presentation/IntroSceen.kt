@@ -65,7 +65,8 @@ import java.util.UUID
 * */
 
 @Composable
-fun IntroScreen(modifier: Modifier = Modifier){
+fun IntroScreen(modifier: Modifier = Modifier,
+                onClick:()->Unit = {}){
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -80,7 +81,7 @@ fun IntroScreen(modifier: Modifier = Modifier){
         ComposeSignUpButton(text = "Next",
             textColor = Green80,
             backgroundColor = Green40) {
-
+            onClick.invoke()
         }
         Spacer(modifier = modifier.height(12.dp))
         ComposeSignUpButton(text = "Skip",
@@ -89,7 +90,7 @@ fun IntroScreen(modifier: Modifier = Modifier){
             borderColor = Color.Gray.copy(alpha = 0.2f),
             borderWidth = 2.dp
         ) {
-
+            onClick.invoke()
         }
         Spacer(modifier = modifier.height(12.dp))
     }

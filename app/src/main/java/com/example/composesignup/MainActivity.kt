@@ -12,26 +12,48 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.example.composesignup.core.navigation.rememberComposeSignUpState
+import com.example.composesignup.core.sessionManager.SessionManager
+import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.example.composesignup.feature.otpverification.OtpVerificationScreen
 import com.example.composesignup.feature.otpverification.OtpView
+import com.example.composesignup.feature.welcome.navigation.WELCOME_ROUTE
 import com.example.composesignup.feature.welcome.presentation.IntroScreen
 import com.example.composesignup.ui.theme.ComposeSignupTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var sessionManager: SessionManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
         setContent {
             ComposeSignupTheme {
+                val isWelcomeScreenShown = runBlocking {
+                    sessionManager.isWelcomeScreenShown().firstOrNull()?:false
+                }
+               val startDestination =  if (!isWelcomeScreenShown){
+                   WELCOME_ROUTE
+                }else FOR_YOU_ROUTE
+
                 val appState = rememberComposeSignUpState()
-                ComposeSignUpApp(appState = appState)
+                ComposeSignUpApp(appState = appState, startDestination = startDestination)
+                LaunchedEffect(true) {
+                    sessionManager.saveWelcomeScreenStatus(true)
+                }
             }
         }
     }
