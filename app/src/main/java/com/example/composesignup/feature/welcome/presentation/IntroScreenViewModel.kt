@@ -46,6 +46,13 @@ class IntroScreenViewModel @Inject constructor(
                 }
                 Log.d(Tag, "onUiAction() called with: action = $action")
             }
+            is IntroScreenUiAction.RefreshInternal->{
+                _uiState.update {
+                    it.copy(
+                        isWelcomeSlideCompleted = false
+                    )
+                }
+            }
             is IntroScreenUiAction.IntroScreenSlideCompleted->{
                 viewModelScope.launch(Dispatchers.IO) {
                     sessionManager.saveWelcomeScreenStatus(true)
@@ -107,4 +114,5 @@ sealed class IntroScreenUiAction{
     data object SetWelcomeScreenStatus:IntroScreenUiAction()
     data object IntroScreenSkipped:IntroScreenUiAction()
     data object IntroScreenSlideCompleted:IntroScreenUiAction()
+    data object RefreshInternal:IntroScreenUiAction()
 }

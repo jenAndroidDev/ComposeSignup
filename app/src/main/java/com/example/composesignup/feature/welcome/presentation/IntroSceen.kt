@@ -61,7 +61,10 @@ fun IntroScreen(
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val isSlidingComplete = uiState.value.isWelcomeSlideCompleted
-    if (isSlidingComplete)onClick.invoke()
+    if (isSlidingComplete){
+        onClick.invoke()
+        uiAction.invoke(IntroScreenUiAction.RefreshInternal)
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -89,7 +92,6 @@ fun IntroScreen(
             borderWidth = 2.dp
         ) {
             uiAction.invoke(IntroScreenUiAction.IntroScreenSkipped)
-            //onClick.invoke()
         }
         Spacer(modifier = modifier.height(12.dp))
     }

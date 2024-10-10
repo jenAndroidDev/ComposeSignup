@@ -9,6 +9,7 @@ import com.example.composesignup.feature.detail.navigation.DETAIL_ROUTE
 import com.example.composesignup.feature.detail.navigation.detailScreen
 import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.example.composesignup.feature.foryou.navigation.forYouScreen
+import com.example.composesignup.feature.foryou.navigation.navigateForYou
 import com.example.composesignup.feature.search.navigation.SEARCH_ROUTE
 import com.example.composesignup.feature.search.navigation.searchScreen
 import com.example.composesignup.feature.welcome.navigation.welcomeScreen
@@ -29,8 +30,10 @@ fun ComposeSignUpNavHost(
         modifier = modifier){
         welcomeScreen{
             appState.navigateToTopLevelDestination(TopLevelDestinations.FOR_YOU)
+            appState.navController.popBackStack()
         }
         forYouScreen{
+
             appState.navigateToDetailScreen()
         }
         searchScreen()
