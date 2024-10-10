@@ -1,10 +1,15 @@
 package com.example.composesignup.feature.welcome.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composesignup.R
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -19,9 +24,9 @@ class IntroScreenVIewModel:ViewModel() {
         getIntroItems()
     }
     private fun getIntroItems(){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.d(Tag, "getIntroItems() called")
             val tempList = uiState.value.data.toMutableList()
-
             val items = arrayListOf(
                 IntroItem(UUID.randomUUID().toString(),
                     R.drawable.pixelcut_export,

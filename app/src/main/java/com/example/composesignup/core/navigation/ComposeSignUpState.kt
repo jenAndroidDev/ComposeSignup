@@ -55,7 +55,6 @@ class ComposeSignUpState(
     fun navigateToTopLevelDestination(topLevelDestinations: TopLevelDestinations){
 
         val topLevelNavOptions = navOptions {
-
             popUpTo(navController.graph.findStartDestination().id){
                 saveState = false
             }

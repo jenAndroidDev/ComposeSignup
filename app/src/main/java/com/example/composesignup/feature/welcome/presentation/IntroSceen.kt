@@ -51,6 +51,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.composesignup.R
 import com.example.composesignup.components.ComposeSignUpButton
 import com.example.composesignup.components.wormTransition
@@ -108,27 +110,12 @@ private fun Title(modifier: Modifier){
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun IntroSlider(modifier: Modifier = Modifier){
-    //move this list to viewmodel.
-    val items = arrayListOf(
-        IntroItem(UUID.randomUUID().toString(),
-            R.drawable.pixelcut_export,
-            "Team Up For Success",
-            "Get ready to unleash your witness the  power of teamwork as we embark on this extraordinary project."
-        ),
-        IntroItem(UUID.randomUUID().toString(),
-            R.drawable.pixelcut_export_2,
-            "User-Friendly at its Core",
-            "Discover the essence of user friendly ness" +
-                    "as our interface empowers you with intuitive controls and effortless interactions."
-        ),
-        IntroItem(UUID.randomUUID().toString(),
-            R.drawable.pixelcut_export_3,
-            "Easy Task Creation",
-            "Quickly Add tasks,set due dates and add descriptions with ease" +
-                    "using our task manager app.Simplify your workflow and stay organised."
-        )
-    )
+fun IntroSlider(
+    modifier: Modifier = Modifier,
+    viewModel: IntroScreenVIewModel = hiltViewModel()
+){
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val introSlideItems = uiState.value.data
     Column(modifier = modifier
         .fillMaxWidth()
         .wrapContentHeight(),
@@ -136,15 +123,15 @@ fun IntroSlider(modifier: Modifier = Modifier){
         horizontalAlignment = Alignment.CenterHorizontally){
 
         val pagerState = rememberPagerState {
-            items.size
+            introSlideItems.size
         }
         HorizontalPager(
             state =pagerState,
         ) {page->
-            IntroItem(model = items[page], modifier = modifier)
+            IntroItem(model = introSlideItems[page], modifier = modifier)
         }//:Horizontal Pager
-        WormIndicator(count = items.size, pagerState = pagerState)
-        Text(text = items[pagerState.currentPage].title,
+        WormIndicator(count = introSlideItems.size, pagerState = pagerState)
+        Text(text = introSlideItems[pagerState.currentPage].title,
                 color = Green80,
                 style = MaterialTheme.typography.titleLarge,
                 fontFamily = fontFamily,
@@ -152,7 +139,7 @@ fun IntroSlider(modifier: Modifier = Modifier){
             )
         Spacer(modifier = modifier.height(12.dp))
         Text(
-            text = items[pagerState.currentPage].description,
+            text = introSlideItems[pagerState.currentPage].description,
             style = MaterialTheme.typography.bodyMedium,
             fontSize = 14.sp,
             color = GREY20,
