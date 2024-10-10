@@ -68,8 +68,11 @@ fun OtpVerificationScreen(modifier: Modifier){
             modifier = modifier.padding(top = 12.dp)
             )
         Spacer(modifier = modifier.height(12.dp))
-        OtpVerificationSubtitle(helperText = "We have sent a code to", email = "rjjeninjoseph@gmail.com",
-            text = "We have sent a code to rjjeninjoseph@gmail.com")
+        OtpVerificationSubtitle(
+            helperText = "We have sent a code to",
+            email = "rjjeninjoseph@gmail.com",
+            text = "We have sent a code to rjjeninjoseph@gmail.com"
+        )
         Spacer(modifier = modifier.height(12.dp))
         EnterOtp(modifier = modifier)
         Spacer(modifier = modifier.weight(1f) )

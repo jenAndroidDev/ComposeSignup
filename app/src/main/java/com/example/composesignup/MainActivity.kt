@@ -1,7 +1,6 @@
 package com.example.composesignup
 
-/*
-* TODO */
+
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -32,6 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
+private const val Tag = "MainActivity"
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
     lateinit var sessionManager: SessionManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
+        enableEdgeToEdge()
         setContent {
             ComposeSignupTheme {
                 val isWelcomeScreenShown = runBlocking {
@@ -49,11 +49,10 @@ class MainActivity : ComponentActivity() {
                    WELCOME_ROUTE
                 }else FOR_YOU_ROUTE
 
+                Log.d(Tag, "Session Manager Called with:$isWelcomeScreenShown")
+
                 val appState = rememberComposeSignUpState()
                 ComposeSignUpApp(appState = appState, startDestination = startDestination)
-                LaunchedEffect(true) {
-                    sessionManager.saveWelcomeScreenStatus(true)
-                }
             }
         }
     }
