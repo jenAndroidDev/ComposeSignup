@@ -59,19 +59,15 @@ class ComposeSignUpState(
 
         val topLevelNavOptions = navOptions {
             popUpTo(navController.graph.findStartDestination().id){
-                saveState = false
-
+                saveState = true
             }
-
+            popUpToTop(navController)
             launchSingleTop = true
-
             restoreState = true
         }
         when(topLevelDestinations){
-
             TopLevelDestinations.FOR_YOU->{
                 navController.navigateForYou(topLevelNavOptions)
-
             }
             TopLevelDestinations.SEARCH->{
                 navController.navigateSearch(topLevelNavOptions)
@@ -80,6 +76,8 @@ class ComposeSignUpState(
     }
 
     fun navigateToDetailScreen() = navController.navigateDetails()
+
+
 
 }
 

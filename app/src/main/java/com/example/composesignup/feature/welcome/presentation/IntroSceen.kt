@@ -1,5 +1,7 @@
 package com.example.composesignup.feature.welcome.presentation
 
+import android.nfc.Tag
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -50,7 +52,7 @@ import java.util.UUID
 *
 * Scale up animation
 * */
-
+private const val Tag = "IntroScreen"
 @Composable
 fun IntroScreen(
     modifier: Modifier = Modifier,
@@ -62,6 +64,10 @@ fun IntroScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val isSlidingComplete = uiState.value.isWelcomeSlideCompleted
     if (isSlidingComplete){
+        Log.d(
+            Tag,
+            "IntroScreen() called with: modifier = $modifier, onClick = $onClick, viewModel = $viewModel, uiAction = $uiAction"
+        )
         onClick.invoke()
         uiAction.invoke(IntroScreenUiAction.RefreshInternal)
     }
