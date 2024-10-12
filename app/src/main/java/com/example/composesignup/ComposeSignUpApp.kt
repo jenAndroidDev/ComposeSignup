@@ -55,6 +55,7 @@ internal fun ComposeSignUp(
             ComposeSignUpNavHost(
                 modifier = modifier,
                 appState = appState,
+                startDestination = startDestination
                 )
         }
     }

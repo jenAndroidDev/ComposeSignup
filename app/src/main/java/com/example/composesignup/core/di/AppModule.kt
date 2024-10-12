@@ -1,4 +1,4 @@
-package com.example.composesignup.core
+package com.example.composesignup.core.di
 
 import android.content.Context
 import com.example.composesignup.core.sessionManager.SessionManager

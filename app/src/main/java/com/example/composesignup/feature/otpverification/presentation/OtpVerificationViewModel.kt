@@ -1,4 +1,4 @@
-package com.example.composesignup.feature.otpverification
+package com.example.composesignup.feature.otpverification.presentation
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +22,7 @@ class OtpVerificationViewModel:ViewModel() {
     private fun onUiAction(action: OtpVerificationUiAction){
         when(action){
 
-            is OtpVerificationUiAction.VerifyOtp->{
+            is OtpVerificationUiAction.VerifyOtp ->{
 
             }
         }
@@ -38,7 +38,7 @@ class OtpVerificationViewModel:ViewModel() {
     }
 }
 sealed interface OtpVerificationUiAction{
-    data class VerifyOtp(val otp:String):OtpVerificationUiAction
+    data class VerifyOtp(val otp:String): OtpVerificationUiAction
 }
 data class OtpVerificationUiState(
     val otp:String = "",

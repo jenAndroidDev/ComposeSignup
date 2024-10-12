@@ -21,7 +21,7 @@ import com.example.composesignup.feature.welcome.navigation.welcomeScreen
 fun ComposeSignUpNavHost(
     modifier: Modifier,
     appState: ComposeSignUpState,
-    startDestination:String= WELCOME_ROUTE,
+    startDestination:String,
 
 ){
     val navController = appState.navController
