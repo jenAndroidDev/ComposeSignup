@@ -1,24 +1,16 @@
 package com.example.composesignup.components
 
-import androidx.compose.foundation.Image
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,18 +23,16 @@ fun ComposeSignUpTextField(
     placeHolder:String = "Your Name",
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    value:String="",
+    onValueChange:(String)->Unit={}
     ){
-
-    var text by remember {
-        mutableStateOf(TextFieldValue(""))
-    }
     Column(modifier = modifier.fillMaxWidth()) {
         TextField(
             modifier = modifier.fillMaxWidth(),
-            value = text,
+            value = value,
             onValueChange = {
-                text = it
+                onValueChange.invoke(it)
             },
             shape = TextFieldShape,
             placeholder = {
@@ -57,20 +47,14 @@ fun ComposeSignUpTextField(
                 focusedContainerColor = containerColor,
                 unfocusedContainerColor = containerColor
             ),
-
             leadingIcon = {
-                leadingIcon
+                leadingIcon?.let { it() }
             },
             trailingIcon = {
-                trailingIcon
+                trailingIcon?.let { it() }
             }
-
         )
     }
-
-
-
-
 }
 private val CornerRadius = 8.dp
 private val TextFieldShape = RoundedCornerShape(size = CornerRadius )

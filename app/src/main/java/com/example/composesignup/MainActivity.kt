@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.composesignup.core.navigation.rememberComposeSignUpState
 import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
+import com.example.composesignup.feature.onboard.presentation.SignUpScreen
 import com.example.composesignup.feature.welcome.navigation.WELCOME_ROUTE
 import com.example.composesignup.ui.theme.ComposeSignupTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,8 +40,9 @@ class MainActivity : ComponentActivity() {
                    WELCOME_ROUTE
                 }else FOR_YOU_ROUTE
 
-                val appState = rememberComposeSignUpState()
-                ComposeSignUpApp(appState = appState, startDestination = startDestination)
+//                val appState = rememberComposeSignUpState()
+//                ComposeSignUpApp(appState = appState, startDestination = startDestination)
+                SignUpScreen()
             }
         }
     }
