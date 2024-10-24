@@ -1,4 +1,4 @@
-package com.example.composesignup.components
+package com.example.composesignup.core.designsystem.components
 
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -20,7 +20,8 @@ fun Modifier.wormTransition(
         val distance = size.width +10.dp.roundToPx()
         Log.d(Tag, "wormTransition() called...${size.width},${size.height}")
         val scrollPosition = pagerState.currentPage + pagerState.currentPageOffsetFraction
-        Log.d(Tag, "wormTransition() called " +
+        Log.d(
+            Tag, "wormTransition() called " +
                 "${pagerState.currentPage}," +
                 "${pagerState.currentPageOffsetFraction}," +
                 "$scrollPosition")
@@ -30,7 +31,8 @@ fun Modifier.wormTransition(
 
         val head = xPos+distance*0f.coerceAtLeast(wormOffset-1)
         val tail = xPos+size.width + 1f.coerceAtMost(wormOffset)*distance
-        Log.d(Tag, "wormTransition() called " +
+        Log.d(
+            Tag, "wormTransition() called " +
                 "${pagerState.currentPage}," +
                 "${pagerState.currentPageOffsetFraction}," +
                 "$scrollPosition," +

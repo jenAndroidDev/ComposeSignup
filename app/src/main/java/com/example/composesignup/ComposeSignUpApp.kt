@@ -14,8 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import com.example.composesignup.components.ComposeSignUpBarItem
-import com.example.composesignup.components.ComposeSignUpNavigationBar
+import com.example.composesignup.core.designsystem.components.ComposeSignUpBarItem
+import com.example.composesignup.core.designsystem.components.ComposeSignUpNavigationBar
 import com.example.composesignup.core.navigation.ComposeSignUpNavHost
 import com.example.composesignup.core.navigation.ComposeSignUpState
 import com.example.composesignup.core.navigation.TopLevelDestinations

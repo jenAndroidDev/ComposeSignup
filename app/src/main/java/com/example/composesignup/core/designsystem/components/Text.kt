@@ -1,4 +1,4 @@
-package com.example.composesignup.components
+package com.example.composesignup.core.designsystem.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

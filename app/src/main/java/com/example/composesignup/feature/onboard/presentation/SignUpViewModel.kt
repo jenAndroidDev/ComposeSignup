@@ -9,7 +9,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 private const val Tag = "SignUpViewModel"
 class SignUpViewModel:ViewModel() {
@@ -32,6 +34,7 @@ class SignUpViewModel:ViewModel() {
         action = {
             onUiAction(it)
         }
+        setValidationMessages()
     }
     private fun onUiAction(action: SignUpUiAction){
         when(action){
@@ -61,10 +64,30 @@ class SignUpViewModel:ViewModel() {
             //TODO validate input and redirect to next screen.
         }
     }
+    private fun setValidationMessages(){
+        viewModelScope.launch (Dispatchers.IO){
+            val tempList = uiState.value.validationMessages.toMutableList()
+            tempList.addAll(getValidationMessages())
+            _uiState.update {
+                it.copy(
+                    validationMessages = tempList
+                )
+            }
+        }
+    }
+    private fun getValidationMessages(): ArrayList<ValidationMessage> {
+        return arrayListOf(
+            ValidationMessage(message = "At Least 8 Characters", isInputValid = false),
+            ValidationMessage(message = "At Least 1 number", isInputValid = false),
+            ValidationMessage(message = "Both Upper Case and Lower Case Letters", isInputValid = false)
+        )
+    }
+
 
 }
 data class SignUpUiState(
-    val isCredentialsValid:Boolean = false
+    val isCredentialsValid:Boolean = false,
+    val validationMessages:List<ValidationMessage> = emptyList()
 )
 sealed class SignUpUiAction{
     data object SignUp:SignUpUiAction()
@@ -73,3 +96,8 @@ sealed class SignUpUiAction{
     data class Password(val password:String):SignUpUiAction()
     data class ConfirmPassword(val password:String):SignUpUiAction()
 }
+data class ValidationMessage(
+    val id:String= UUID.randomUUID().toString(),
+    val message:String,
+    val isInputValid:Boolean
+)

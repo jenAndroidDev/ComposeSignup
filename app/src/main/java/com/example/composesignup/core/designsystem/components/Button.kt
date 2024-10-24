@@ -1,4 +1,4 @@
-package com.example.composesignup.components
+package com.example.composesignup.core.designsystem.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

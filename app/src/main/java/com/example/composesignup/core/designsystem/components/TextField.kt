@@ -1,4 +1,4 @@
-package com.example.composesignup.components
+package com.example.composesignup.core.designsystem.components
 
 
 import androidx.compose.foundation.layout.Column
@@ -44,8 +44,10 @@ fun ComposeSignUpTextField(
             },
             visualTransformation = visualTransformation,
             colors = TextFieldDefaults.colors(
+                disabledContainerColor = Color.Transparent,
                 focusedContainerColor = containerColor,
-                unfocusedContainerColor = containerColor
+                unfocusedContainerColor = containerColor,
+                unfocusedIndicatorColor = Color.Transparent
             ),
             leadingIcon = {
                 leadingIcon?.let { it() }
@@ -57,7 +59,7 @@ fun ComposeSignUpTextField(
     }
 }
 private val CornerRadius = 8.dp
-private val TextFieldShape = RoundedCornerShape(size = CornerRadius )
+private val TextFieldShape = RoundedCornerShape(size = CornerRadius)
 
 @Preview
 @Composable

@@ -40,8 +40,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.composesignup.R
-import com.example.composesignup.components.ComposeSignUpButton
-import com.example.composesignup.components.wormTransition
+import com.example.composesignup.core.designsystem.components.ComposeSignUpButton
+import com.example.composesignup.core.designsystem.components.wormTransition
 import com.example.composesignup.ui.theme.GREY20
 import com.example.composesignup.ui.theme.Green40
 import com.example.composesignup.ui.theme.Green80

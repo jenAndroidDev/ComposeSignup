@@ -37,9 +37,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.composesignup.components.ComposeSignUpButton
-import com.example.composesignup.components.HyperLinkAnnotatedText
-import com.example.composesignup.components.OtpVerificationSubtitle
+import com.example.composesignup.core.designsystem.components.ComposeSignUpButton
+import com.example.composesignup.core.designsystem.components.HyperLinkAnnotatedText
+import com.example.composesignup.core.designsystem.components.OtpVerificationSubtitle
 import com.example.composesignup.feature.welcome.presentation.fontFamily
 import com.example.composesignup.ui.theme.GREY20
 
