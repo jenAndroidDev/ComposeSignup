@@ -1,6 +1,11 @@
 package com.example.composesignup.feature.onboard.presentation
 
-import androidx.compose.foundation.Image
+
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,12 +20,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,6 +36,7 @@ import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
 import com.example.composesignup.core.designsystem.icon.ComposeSignupVectors
 import com.example.composesignup.ui.theme.GREY20
 import com.example.composesignup.ui.theme.GREY80
+import com.example.composesignup.ui.theme.Green40
 import kotlinx.coroutines.flow.StateFlow
 
 /*
@@ -43,12 +51,21 @@ fun SignUpScreen(
     action:(SignUpUiAction)->Unit = viewModel.action,
     uiState:StateFlow<SignUpUiState> = viewModel.uiState
 ){
-    Column(modifier = modifier.fillMaxSize()
+    Column(modifier = modifier
+        .fillMaxSize()
         .background(color = GREY20.copy(alpha = 1f))
         .padding(12.dp)
     ) {
         SignUpTextFields(
-            modifier, action, viewModel
+            modifier,
+            action,
+            viewModel
+        )
+        Spacer(modifier = modifier.height(16.dp))
+        SignUpValidationList(
+            modifier = modifier,
+            viewModel = viewModel,
+            action = action
         )
     }
 }
@@ -117,7 +134,11 @@ action: (SignUpUiAction) -> Unit
         LazyColumn(modifier = modifier) {
             items(count = validationMsg.size,
                 ){
-
+                ValidationItem(
+                    modifier = modifier,
+                    message = validationMsg[it].message,
+                    isValid = validationMsg[it].isInputValid
+                )
             }
         }
     }
@@ -127,29 +148,38 @@ action: (SignUpUiAction) -> Unit
 @Composable
 fun ValidationItem(
     modifier: Modifier = Modifier,
-    message:String = "Atleast 8 Characters",
-    isValid:Boolean = false
+    message:String,
+    isValid:Boolean
 ){
     Row(modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         ) {
         Icon(
             painterResource(ComposeSignupVectors.SuccessTick),
-            modifier = modifier.size(18.dp),
+            modifier = modifier.size(16.dp),
             contentDescription = null)
-        Text(text = message,
+        val validState by rememberUpdatedState(isValid)
+        val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
+        val animatedColor by infiniteTransition.animateColor(
+            initialValue = GREY80,
+            targetValue = Green40,
+            animationSpec = infiniteRepeatable(tween(100),RepeatMode.Reverse), label = "color"
+        )
+        Text(
+            text = message,
             modifier = modifier.padding(start = 8.dp),
             style = MaterialTheme.typography.labelSmall,
-            color = GREY80
+            color = if (validState) {
+                animatedColor
+            }else GREY80
             )
     }
 
 }
 
-@Preview
 @Composable
 fun PreviewValidationItem(){
-    ValidationItem()
+    //ValidationItem()
 }
 
 @Preview
