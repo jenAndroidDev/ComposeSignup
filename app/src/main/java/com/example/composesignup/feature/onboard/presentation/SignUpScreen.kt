@@ -35,8 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
+
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextMotion
@@ -77,7 +76,7 @@ fun SignUpScreen(
         Spacer(modifier = modifier.height(16.dp))
         Validation(modifier = modifier,
             uiState)
-    }
+    }//Column
 }
 //is it a good practice to pass viewmodel as a parameter??
 @Composable
@@ -116,6 +115,9 @@ fun SignUpTextFields(
             leadingIcon = {
                 Icon(imageVector = ComposeSignUpIcons.PasswordLock, contentDescription = null)
             },
+            trailingIcon = {
+                Icon(imageVector = ComposeSignUpIcons.PasswordEye, contentDescription = "toggle Password Visibility")
+            },
             value = viewModel.password,
             visualTransformation = PasswordVisualTransformation()){
             action.invoke(SignUpUiAction.Password(it))
@@ -128,10 +130,13 @@ fun SignUpTextFields(
             leadingIcon = {
                 Icon(imageVector = ComposeSignUpIcons.PasswordLock,contentDescription = null)
             },
+            trailingIcon = {
+                Icon(imageVector = ComposeSignUpIcons.PasswordEye, contentDescription = "toggle Password Visibility")
+            },
             visualTransformation = PasswordVisualTransformation()){
             action.invoke(SignUpUiAction.ConfirmPassword(it))
         }
-    }
+    }//:Column
 }
 @Composable
 fun Validation(
@@ -161,7 +166,7 @@ fun Validation(
                 style = MaterialTheme.typography.labelSmall,
                 color = if (isValidPassword) color else Color.Black
             )
-    }
+    }//Column
 }
 //Migrate Validation List
 @Composable

@@ -1,6 +1,5 @@
 package com.example.composesignup.feature.onboard.presentation
 
-import android.hardware.camera2.CameraExtensionSession.StillCaptureLatency
 import android.util.Log
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
@@ -10,7 +9,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composesignup.core.utils.hasMin8Characters
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
