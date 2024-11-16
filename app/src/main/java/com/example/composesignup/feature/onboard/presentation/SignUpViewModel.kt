@@ -42,7 +42,7 @@ class SignUpViewModel:ViewModel() {
     private fun onUiAction(action: SignUpUiAction){
         when(action){
             is SignUpUiAction.SignUp->{
-
+                validateUserInput()
             }
             is SignUpUiAction.Email->{
                 email = action.email
@@ -122,25 +122,18 @@ class SignUpViewModel:ViewModel() {
             ValidationMessage(message = "Both Upper Case and Lower Case Letters", isInputValid = false, id = "3")
         )
     }
-    private fun isValidString(input: String): Boolean {
-        val pattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$"
-        val regex = Regex(pattern)
-        return regex.matches(input)
-    }
-    private fun setInputValidation(){
-        viewModelScope.launch {
-            val data = uiState.value.validationMessages.listIterator()
-            while (data.hasNext()){
-                val currentItem = data.next()
-                if(currentItem.id>"1"){
-                    data.set(currentItem.copy(isInputValid = true))
-                }
-            }
-        }
-    }
     private fun isPasswordValid(password:String):Boolean{
         val pattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$".toRegex()
         return password.matches(pattern)
+    }
+    private fun validateUserInput(){
+        if (userName.isNotEmpty()){
+            _uiState.update {
+                it.copy(
+                    isInputValid = true
+                )
+            }
+        }
     }
 
 
@@ -150,7 +143,8 @@ data class SignUpUiState(
     val validationMessages:SnapshotStateList<ValidationMessage> = SnapshotStateList(),
     val isPasswordTyping:Boolean = false,
     val isPasswordSizeValid:Boolean = false,
-    val isTermsAccepted:Boolean = false
+    val isTermsAccepted:Boolean = false,
+    val isInputValid:Boolean  = false
 )
 sealed class SignUpUiAction{
     data object SignUp:SignUpUiAction()

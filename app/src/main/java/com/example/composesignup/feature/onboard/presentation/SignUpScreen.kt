@@ -52,6 +52,7 @@ fun SignUpScreen(
     action:(SignUpUiAction)->Unit = viewModel.action,
     uiState:StateFlow<SignUpUiState> = viewModel.uiState
 ){
+    val isInputValid = uiState.collectAsStateWithLifecycle().value.isInputValid
     Column(modifier = modifier
         .fillMaxSize()
         .background(color = GREY20.copy(alpha = 1f))
@@ -72,7 +73,8 @@ fun SignUpScreen(
             uiState = uiState,
             action = action)
         Spacer(modifier = modifier.height(12.dp))
-        ComposeSignUpButton(text = "Sign Up") {
+        ComposeSignUpButton(text = "Sign Up",
+            backgroundColor = if (isInputValid) Green40.copy(0.4f)else Green40) {
             action.invoke(SignUpUiAction.SignUp)
         }
         Spacer(modifier = modifier.height(12.dp))
@@ -150,6 +152,7 @@ fun Validation(
     val isValidPassword = validationState.value.isCredentialsValid
 
     val color by animateColorAsState(targetValue = Green40, label = "color")
+
         Column {
             Text(
                 text = "At Least 8 characters",
