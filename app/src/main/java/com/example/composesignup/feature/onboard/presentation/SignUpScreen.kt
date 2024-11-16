@@ -35,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextMotion
@@ -43,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.composesignup.core.designsystem.components.ComposeSignUpButton
 import com.example.composesignup.core.designsystem.components.ComposeSignUpTextField
 import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
 import com.example.composesignup.core.designsystem.icon.ComposeSignupVectors
@@ -136,6 +136,11 @@ fun SignUpTextFields(
             visualTransformation = PasswordVisualTransformation()){
             action.invoke(SignUpUiAction.ConfirmPassword(it))
         }
+        Spacer(modifier = modifier.weight(1f))
+        ComposeSignUpButton(text = "Sign Up") {
+
+        }
+        Spacer(modifier = modifier.height(12.dp))
     }//:Column
 }
 @Composable
@@ -169,66 +174,8 @@ fun Validation(
     }//Column
 }
 //Migrate Validation List
-@Composable
-fun SignUpValidationList(
-    modifier: Modifier,
-    uiState: StateFlow<SignUpUiState>,
-    action: (SignUpUiAction) -> Unit
-){
-    Column {
-        val state = uiState.collectAsStateWithLifecycle()
-        val validationMsg = state.value.validationMessages
-        Log.d(Tag, "SignUpValidationList() called,${state.value.isCredentialsValid}")
-        if (state.value.isCredentialsValid) {
-            LazyColumn(modifier = modifier) {
-                items(
-                    count = validationMsg.size,
-                ) {
-                    ValidationItem(
-                        modifier = modifier,
-                        message = validationMsg[it].message,
-                        isValid = validationMsg[it].isInputValid
-                    )
-                }
-            }
-        }
-    }
-}
 
-@Composable
-fun ValidationItem(
-    modifier: Modifier,
-    message:String,
-    isValid:Boolean
-){
-    Row(modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        ) {
-        Icon(
-            painterResource(ComposeSignupVectors.SuccessTick),
-            modifier = modifier.size(16.dp),
-            contentDescription = null)
-        val validState by rememberUpdatedState(isValid)
-        var animatedBgColor by remember {
-            mutableStateOf(validState)
-        }
-        if (validState)animatedBgColor = true else animatedBgColor = false
-        val animatedColor by animateColorAsState(
-            targetValue = if (animatedBgColor) Green40 else GREY80,
-            label = "color"
-        )
-        Text(
-            text = message,
-            modifier = modifier.padding(start = 8.dp)
-                .animateContentSize(
-                animationSpec = tween(1000, easing = LinearEasing)
-            ),
-            style = MaterialTheme.typography.labelSmall,
-            color = animatedColor
-            )
-    }
 
-}
 
 @Composable
 fun PreviewValidationItem(){
