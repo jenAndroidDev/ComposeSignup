@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ComposeSignup</string>
+    <string name="password_length">Atleast 8 characters</string>
+    <string name="name_hint">Your Name</string>
+    <string name="email_hint">Enter Your Email</string>
+    <string name="password_hint">Enter Your Password</string>
+    <string name="password_confirm_hint">Confirm Your Password</string>
+    <string name="terms_and_conditions">By agreeing to the terms and conditions,you are entering legally binding contract with the service provider.</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login">Login</string>
 </resources>
