@@ -75,6 +75,14 @@ class SignUpViewModel:ViewModel() {
                 confirmPassword = action.password
                 Log.d(Tag, "onUiAction() called with: confirmPassword = ${action.password}")
             }
+            is SignUpUiAction.ToggleTermsAndCondition->{
+                val isTermsAccepted = uiState.value.isTermsAccepted
+                _uiState.update {
+                    it.copy(
+                        isTermsAccepted = !isTermsAccepted
+                    )
+                }
+            }
         }
     }
     private fun toggleHelperTextColor(id:String="1"){
@@ -141,14 +149,17 @@ data class SignUpUiState(
     val isCredentialsValid:Boolean = false,
     val validationMessages:SnapshotStateList<ValidationMessage> = SnapshotStateList(),
     val isPasswordTyping:Boolean = false,
-    val isPasswordSizeValid:Boolean = false
+    val isPasswordSizeValid:Boolean = false,
+    val isTermsAccepted:Boolean = false
 )
 sealed class SignUpUiAction{
     data object SignUp:SignUpUiAction()
+    data object ToggleTermsAndCondition:SignUpUiAction()
     data class UserName(val name:String):SignUpUiAction()
     data class Email(val email:String):SignUpUiAction()
     data class Password(val password:String):SignUpUiAction()
     data class ConfirmPassword(val password:String):SignUpUiAction()
+
 }
 @Immutable
 data class ValidationMessage(

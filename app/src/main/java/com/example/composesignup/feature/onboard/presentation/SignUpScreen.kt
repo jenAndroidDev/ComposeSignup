@@ -2,40 +2,30 @@ package com.example.composesignup.feature.onboard.presentation
 
 
 
-import android.util.Log
-import androidx.compose.animation.animateColor
+
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextMotion
 import androidx.compose.ui.tooling.preview.Preview
@@ -45,10 +35,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.composesignup.core.designsystem.components.ComposeSignUpButton
 import com.example.composesignup.core.designsystem.components.ComposeSignUpTextField
 import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
-import com.example.composesignup.core.designsystem.icon.ComposeSignupVectors
 import com.example.composesignup.ui.theme.GREY20
-import com.example.composesignup.ui.theme.GREY80
 import com.example.composesignup.ui.theme.Green40
+import com.example.composesignup.ui.theme.Green80
 import kotlinx.coroutines.flow.StateFlow
 
 /*
@@ -69,13 +58,24 @@ fun SignUpScreen(
         .padding(12.dp)
     ) {
         SignUpTextFields(
-            modifier,
-            action,
-            viewModel
+           modifier =  modifier,
+            action = action,
+            viewModel = viewModel
         )
         Spacer(modifier = modifier.height(16.dp))
-        Validation(modifier = modifier,
-            uiState)
+        Validation(
+            modifier = modifier,
+            uiState = uiState)
+        Spacer(modifier = modifier.weight(1f))
+        TermsAndCondition(
+            modifier = modifier,
+            uiState = uiState,
+            action = action)
+        Spacer(modifier = modifier.height(12.dp))
+        ComposeSignUpButton(text = "Sign Up") {
+            action.invoke(SignUpUiAction.SignUp)
+        }
+        Spacer(modifier = modifier.height(12.dp))
     }//Column
 }
 //is it a good practice to pass viewmodel as a parameter??
@@ -96,7 +96,7 @@ fun SignUpTextFields(
             }
         ){
             action.invoke(SignUpUiAction.UserName(it))
-        }
+        }//:TextField=>User Name
         Spacer(modifier = modifier.height(TextFieldPadding))
         ComposeSignUpTextField(
             modifier = modifier,
@@ -107,7 +107,7 @@ fun SignUpTextFields(
             }
         ){
             action.invoke(SignUpUiAction.Email(it))
-        }
+        }//:TextField=>User Email
         Spacer(modifier = modifier.height(TextFieldPadding))
         ComposeSignUpTextField(
             modifier = modifier,
@@ -121,7 +121,7 @@ fun SignUpTextFields(
             value = viewModel.password,
             visualTransformation = PasswordVisualTransformation()){
             action.invoke(SignUpUiAction.Password(it))
-        }
+        }//:TextField=>Password
         Spacer(modifier = modifier.height(TextFieldPadding))
         ComposeSignUpTextField(
             modifier = modifier,
@@ -135,12 +135,8 @@ fun SignUpTextFields(
             },
             visualTransformation = PasswordVisualTransformation()){
             action.invoke(SignUpUiAction.ConfirmPassword(it))
-        }
-        Spacer(modifier = modifier.weight(1f))
-        ComposeSignUpButton(text = "Sign Up") {
+        }//:TextField=>ConfirmPassword
 
-        }
-        Spacer(modifier = modifier.height(12.dp))
     }//:Column
 }
 @Composable
@@ -157,15 +153,15 @@ fun Validation(
         Column {
             Text(
                 text = "At Least 8 characters",
-                style = LocalTextStyle.current.copy(textMotion = TextMotion.Animated),
+                style =MaterialTheme.typography.labelSmall,
                 color = if (isPasswordSizeValid)color else Color.Black)
-            Spacer(modifier = modifier.height(12.dp))
+            Spacer(modifier = modifier.height(4.dp))
             Text(
                 text = "At Least One Number",
                 style = MaterialTheme.typography.labelSmall,
                 color = if (isValidPassword) color else Color.Black
             )
-            Spacer(modifier = modifier.height(12.dp))
+            Spacer(modifier = modifier.height(4.dp))
             Text(
                 text = "Both Upper Case and Lower Case",
                 style = MaterialTheme.typography.labelSmall,
@@ -174,16 +170,42 @@ fun Validation(
     }//Column
 }
 //Migrate Validation List
-
-
-
 @Composable
-fun PreviewValidationItem(){
-    //ValidationItem()
+private fun TermsAndCondition(
+    modifier: Modifier,
+    uiState: StateFlow<SignUpUiState>,
+    action: (SignUpUiAction) -> Unit
+    ){
+    val termsAcceptedState = uiState.collectAsStateWithLifecycle()
+    val isTermsAccepted = termsAcceptedState.value.isTermsAccepted
+    Row(
+        modifier = modifier.padding(start = 6.dp),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically) {
+        Switch(
+            checked = isTermsAccepted,
+            onCheckedChange = {
+                action.invoke(SignUpUiAction.ToggleTermsAndCondition)
+            },
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = Green40,
+                uncheckedThumbColor = Green40.copy(alpha = 0.2f),
+                checkedTrackColor = Green80,
+                uncheckedTrackColor = Green80.copy(alpha = 0.4f),
+                )
+            )
+        Spacer(modifier.padding(12.dp))
+        Text(
+            text = "By agreeing to the terms and conditions,you are entering legally binding contract with the service provider.",
+            style = MaterialTheme.typography.labelMedium,
+            )
+    }//:Row
 }
+
 
 @Preview
 @Composable
 fun PreviewSignUpScreen(){
     SignUpScreen()
 }
+
