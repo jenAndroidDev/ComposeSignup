@@ -1,8 +1,6 @@
 package com.example.composesignup.feature.onboard.presentation
 
 
-
-
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,11 +20,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.composesignup.R
 import com.example.composesignup.core.designsystem.components.ComposeSignUpButton
 import com.example.composesignup.core.designsystem.components.ComposeSignUpTextField
 import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
@@ -36,150 +36,174 @@ import com.example.composesignup.ui.theme.Green80
 import kotlinx.coroutines.flow.StateFlow
 
 /*
-* Do not hardcode the strings*/
+* 1.Do not hardcode the strings
+* 2.Form Validation
+* 3.Navigate To Dashboard Screen
+* 4.Replace TrailIcon in Text Field Screen
+* 5.Confirm Password Validation.
+* 6.Design Alignment
+* 7.Unit Test and Check For Any Recompositions During State Changes
+* */
 private val TopPadding = 40.dp
 private val TextFieldPadding = 16.dp
 private const val Tag = "SignUpScreen"
+
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     viewModel: SignUpViewModel = hiltViewModel(),
-    action:(SignUpUiAction)->Unit = viewModel.action,
-    uiState:StateFlow<SignUpUiState> = viewModel.uiState
-){
+    action: (SignUpUiAction) -> Unit = viewModel.action,
+    uiState: StateFlow<SignUpUiState> = viewModel.uiState
+) {
     val isInputValid = uiState.collectAsStateWithLifecycle().value.isInputValid
-    Column(modifier = modifier
-        .fillMaxSize()
-        .background(color = GREY20.copy(alpha = 1f))
-        .padding(12.dp)
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = GREY20.copy(alpha = 1f))
+            .padding(12.dp)
     ) {
         SignUpTextFields(
-           modifier =  modifier,
+            modifier = modifier,
             action = action,
             viewModel = viewModel
         )
         Spacer(modifier = modifier.height(16.dp))
         Validation(
             modifier = modifier,
-            uiState = uiState)
+            uiState = uiState
+        )
         Spacer(modifier = modifier.weight(1f))
         TermsAndCondition(
             modifier = modifier,
             uiState = uiState,
-            action = action)
+            action = action
+        )
         Spacer(modifier = modifier.height(12.dp))
-        ComposeSignUpButton(text = "Sign Up",
-            backgroundColor = if (isInputValid) Green40.copy(0.4f)else Green40) {
+        ComposeSignUpButton(
+            text = stringResource(id = R.string.sign_up),
+            backgroundColor = if (isInputValid) Green40.copy(0.4f) else Green40
+        ) {
             action.invoke(SignUpUiAction.SignUp)
         }
         Spacer(modifier = modifier.height(12.dp))
     }//Column
 }
+
 //is it a good practice to pass viewmodel as a parameter??
 @Composable
 fun SignUpTextFields(
     modifier: Modifier,
     action: (SignUpUiAction) -> Unit,
     viewModel: SignUpViewModel
-){
+) {
     Column {
         Spacer(modifier = modifier.height(TopPadding))
         ComposeSignUpTextField(
             modifier = modifier,
-            placeHolder = "Your Name",
+            placeHolder = stringResource(id = R.string.name_hint),
             value = viewModel.userName,
             leadingIcon = {
                 Icon(imageVector = ComposeSignUpIcons.Profile, contentDescription = null)
             }
-        ){
+        ) {
             action.invoke(SignUpUiAction.UserName(it))
         }//:TextField=>User Name
         Spacer(modifier = modifier.height(TextFieldPadding))
         ComposeSignUpTextField(
             modifier = modifier,
-            placeHolder = "Enter Your Email",
+            placeHolder = stringResource(id = R.string.email_hint),
             value = viewModel.email,
             leadingIcon = {
-                Icon(imageVector = ComposeSignUpIcons.Email,contentDescription = null)
+                Icon(imageVector = ComposeSignUpIcons.Email, contentDescription = null)
             }
-        ){
+        ) {
             action.invoke(SignUpUiAction.Email(it))
         }//:TextField=>User Email
         Spacer(modifier = modifier.height(TextFieldPadding))
         ComposeSignUpTextField(
             modifier = modifier,
-            placeHolder = "Enter Your Password",
+            placeHolder = stringResource(id = R.string.password_hint),
             leadingIcon = {
                 Icon(imageVector = ComposeSignUpIcons.PasswordLock, contentDescription = null)
             },
             trailingIcon = {
-                Icon(imageVector = ComposeSignUpIcons.PasswordEye, contentDescription = "toggle Password Visibility")
+                Icon(
+                    imageVector = ComposeSignUpIcons.PasswordEye,
+                    contentDescription = "toggle Password Visibility"
+                )
             },
             value = viewModel.password,
-            visualTransformation = PasswordVisualTransformation()){
+            visualTransformation = PasswordVisualTransformation()
+        ) {
             action.invoke(SignUpUiAction.Password(it))
         }//:TextField=>Password
         Spacer(modifier = modifier.height(TextFieldPadding))
         ComposeSignUpTextField(
             modifier = modifier,
-            placeHolder = "Confirm Your Password",
+            placeHolder = stringResource(id = R.string.password_confirm_hint),
             value = viewModel.confirmPassword,
             leadingIcon = {
-                Icon(imageVector = ComposeSignUpIcons.PasswordLock,contentDescription = null)
+                Icon(imageVector = ComposeSignUpIcons.PasswordLock, contentDescription = null)
             },
             trailingIcon = {
-                Icon(imageVector = ComposeSignUpIcons.PasswordEye, contentDescription = "toggle Password Visibility")
+                Icon(
+                    imageVector = ComposeSignUpIcons.PasswordEye,
+                    contentDescription = "toggle Password Visibility"
+                )
             },
-            visualTransformation = PasswordVisualTransformation()){
+            visualTransformation = PasswordVisualTransformation()
+        ) {
             action.invoke(SignUpUiAction.ConfirmPassword(it))
         }//:TextField=>ConfirmPassword
 
     }//:Column
 }
+
 @Composable
 fun Validation(
     modifier: Modifier,
     uiState: StateFlow<SignUpUiState>
-){
+) {
     val validationState = uiState.collectAsStateWithLifecycle()
     val isPasswordTyping = validationState.value.isPasswordTyping
     val isPasswordSizeValid = validationState.value.isPasswordSizeValid
     val isValidPassword = validationState.value.isCredentialsValid
-
-    val color by animateColorAsState(targetValue = Green40, label = "color")
-
-        Column {
-            Text(
-                text = "At Least 8 characters",
-                style =MaterialTheme.typography.labelSmall,
-                color = if (isPasswordSizeValid)color else Color.Black)
-            Spacer(modifier = modifier.height(4.dp))
-            Text(
-                text = "At Least One Number",
-                style = MaterialTheme.typography.labelSmall,
-                color = if (isValidPassword) color else Color.Black
-            )
-            Spacer(modifier = modifier.height(4.dp))
-            Text(
-                text = "Both Upper Case and Lower Case",
-                style = MaterialTheme.typography.labelSmall,
-                color = if (isValidPassword) color else Color.Black
-            )
+    Column {
+        val color by animateColorAsState(targetValue = Green40, label = "color")
+        Text(
+            text = "At Least 8 characters",
+            style = MaterialTheme.typography.labelSmall,
+            color = if (isPasswordSizeValid) color else Color.Black
+        )
+        Spacer(modifier = modifier.height(4.dp))
+        Text(
+            text = "At Least One Number",
+            style = MaterialTheme.typography.labelSmall,
+            color = if (isValidPassword) color else Color.Black
+        )
+        Spacer(modifier = modifier.height(4.dp))
+        Text(
+            text = "Both Upper Case and Lower Case",
+            style = MaterialTheme.typography.labelSmall,
+            color = if (isValidPassword) color else Color.Black
+        )
     }//Column
 }
+
 //Migrate Validation List
 @Composable
 private fun TermsAndCondition(
     modifier: Modifier,
     uiState: StateFlow<SignUpUiState>,
     action: (SignUpUiAction) -> Unit
-    ){
+) {
     val termsAcceptedState = uiState.collectAsStateWithLifecycle()
     val isTermsAccepted = termsAcceptedState.value.isTermsAccepted
     Row(
         modifier = modifier.padding(start = 6.dp),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically) {
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Switch(
             checked = isTermsAccepted,
             onCheckedChange = {
@@ -190,20 +214,20 @@ private fun TermsAndCondition(
                 uncheckedThumbColor = Green40.copy(alpha = 0.2f),
                 checkedTrackColor = Green80,
                 uncheckedTrackColor = Green80.copy(alpha = 0.4f),
-                )
             )
+        )
         Spacer(modifier.padding(12.dp))
         Text(
-            text = "By agreeing to the terms and conditions,you are entering legally binding contract with the service provider.",
+            text = stringResource(id = R.string.terms_and_conditions),
             style = MaterialTheme.typography.labelMedium,
-            )
+        )
     }//:Row
 }
 
 
 @Preview
 @Composable
-fun PreviewSignUpScreen(){
+fun PreviewSignUpScreen() {
     SignUpScreen()
 }
 
