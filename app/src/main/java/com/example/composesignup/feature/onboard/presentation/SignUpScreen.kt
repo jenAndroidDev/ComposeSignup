@@ -1,8 +1,14 @@
 package com.example.composesignup.feature.onboard.presentation
 
 
+
+import android.util.Log
 import androidx.compose.animation.animateColor
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
@@ -17,17 +23,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextMotion
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -62,13 +75,11 @@ fun SignUpScreen(
             viewModel
         )
         Spacer(modifier = modifier.height(16.dp))
-        SignUpValidationList(
-            modifier = modifier,
-            viewModel = viewModel,
-            action = action
-        )
+        Validation(modifier = modifier,
+            uiState)
     }
 }
+//is it a good practice to pass viewmodel as a parameter??
 @Composable
 fun SignUpTextFields(
     modifier: Modifier,
@@ -123,31 +134,65 @@ fun SignUpTextFields(
     }
 }
 @Composable
+fun Validation(
+    modifier: Modifier,
+    uiState: StateFlow<SignUpUiState>
+){
+    val validationState = uiState.collectAsStateWithLifecycle()
+    val isPasswordTyping = validationState.value.isPasswordTyping
+    val isPasswordSizeValid = validationState.value.isPasswordSizeValid
+    val isValidPassword = validationState.value.isCredentialsValid
+
+    val color by animateColorAsState(targetValue = Green40, label = "color")
+        Column {
+            Text(
+                text = "At Least 8 characters",
+                style = LocalTextStyle.current.copy(textMotion = TextMotion.Animated),
+                color = if (isPasswordSizeValid)color else Color.Black)
+            Spacer(modifier = modifier.height(12.dp))
+            Text(
+                text = "At Least One Number",
+                style = MaterialTheme.typography.labelSmall,
+                color = if (isValidPassword) color else Color.Black
+            )
+            Spacer(modifier = modifier.height(12.dp))
+            Text(
+                text = "Both Upper Case and Lower Case",
+                style = MaterialTheme.typography.labelSmall,
+                color = if (isValidPassword) color else Color.Black
+            )
+    }
+}
+//Migrate Validation List
+@Composable
 fun SignUpValidationList(
-modifier: Modifier,
-viewModel: SignUpViewModel,
-action: (SignUpUiAction) -> Unit
+    modifier: Modifier,
+    uiState: StateFlow<SignUpUiState>,
+    action: (SignUpUiAction) -> Unit
 ){
     Column {
-        val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-        val validationMsg = uiState.value.validationMessages
-        LazyColumn(modifier = modifier) {
-            items(count = validationMsg.size,
-                ){
-                ValidationItem(
-                    modifier = modifier,
-                    message = validationMsg[it].message,
-                    isValid = validationMsg[it].isInputValid
-                )
+        val state = uiState.collectAsStateWithLifecycle()
+        val validationMsg = state.value.validationMessages
+        Log.d(Tag, "SignUpValidationList() called,${state.value.isCredentialsValid}")
+        if (state.value.isCredentialsValid) {
+            LazyColumn(modifier = modifier) {
+                items(
+                    count = validationMsg.size,
+                ) {
+                    ValidationItem(
+                        modifier = modifier,
+                        message = validationMsg[it].message,
+                        isValid = validationMsg[it].isInputValid
+                    )
+                }
             }
         }
     }
-
 }
 
 @Composable
 fun ValidationItem(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     message:String,
     isValid:Boolean
 ){
@@ -159,19 +204,22 @@ fun ValidationItem(
             modifier = modifier.size(16.dp),
             contentDescription = null)
         val validState by rememberUpdatedState(isValid)
-        val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
-        val animatedColor by infiniteTransition.animateColor(
-            initialValue = GREY80,
-            targetValue = Green40,
-            animationSpec = infiniteRepeatable(tween(100),RepeatMode.Reverse), label = "color"
+        var animatedBgColor by remember {
+            mutableStateOf(validState)
+        }
+        if (validState)animatedBgColor = true else animatedBgColor = false
+        val animatedColor by animateColorAsState(
+            targetValue = if (animatedBgColor) Green40 else GREY80,
+            label = "color"
         )
         Text(
             text = message,
-            modifier = modifier.padding(start = 8.dp),
+            modifier = modifier.padding(start = 8.dp)
+                .animateContentSize(
+                animationSpec = tween(1000, easing = LinearEasing)
+            ),
             style = MaterialTheme.typography.labelSmall,
-            color = if (validState) {
-                animatedColor
-            }else GREY80
+            color = animatedColor
             )
     }
 
