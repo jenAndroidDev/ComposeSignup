@@ -1,6 +1,7 @@
 package com.example.composesignup.feature.onboard.presentation
 
 
+import android.widget.Toast
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,17 +32,18 @@ import com.example.composesignup.R
 import com.example.composesignup.core.designsystem.components.ComposeSignUpButton
 import com.example.composesignup.core.designsystem.components.ComposeSignUpTextField
 import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
+import com.example.composesignup.core.utils.TextFieldException
 import com.example.composesignup.ui.theme.GREY20
 import com.example.composesignup.ui.theme.Green40
 import com.example.composesignup.ui.theme.Green80
 import kotlinx.coroutines.flow.StateFlow
 
 /*
-* 1.Do not hardcode the strings
-* 2.Form Validation
+* 1.Do not hardcode the strings=>Done
+* 2.Form Validation=>Done
 * 3.Navigate To Dashboard Screen
 * 4.Replace TrailIcon in Text Field Screen
-* 5.Confirm Password Validation.
+* 5.Confirm Password Validation.=>Done
 * 6.Design Alignment
 * 7.Unit Test and Check For Any Recompositions During State Changes
 * */
@@ -55,7 +58,6 @@ fun SignUpScreen(
     action: (SignUpUiAction) -> Unit = viewModel.action,
     uiState: StateFlow<SignUpUiState> = viewModel.uiState
 ) {
-    val isInputValid = uiState.collectAsStateWithLifecycle().value.isInputValid
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -80,12 +82,15 @@ fun SignUpScreen(
         )
         Spacer(modifier = modifier.height(12.dp))
         ComposeSignUpButton(
-            text = stringResource(id = R.string.sign_up),
-            backgroundColor = if (isInputValid) Green40.copy(0.4f) else Green40
+            text = stringResource(id = R.string.sign_up)
         ) {
             action.invoke(SignUpUiAction.SignUp)
         }
         Spacer(modifier = modifier.height(12.dp))
+        UiError(
+            uiState = uiState,
+            action = action
+        )
     }//Column
 }
 
@@ -165,7 +170,6 @@ fun Validation(
     uiState: StateFlow<SignUpUiState>
 ) {
     val validationState = uiState.collectAsStateWithLifecycle()
-    val isPasswordTyping = validationState.value.isPasswordTyping
     val isPasswordSizeValid = validationState.value.isPasswordSizeValid
     val isValidPassword = validationState.value.isCredentialsValid
     Column {
@@ -222,6 +226,29 @@ private fun TermsAndCondition(
             style = MaterialTheme.typography.labelMedium,
         )
     }//:Row
+}
+@Composable
+fun UiError(
+    uiState: StateFlow<SignUpUiState>,
+    action: (SignUpUiAction) -> Unit
+){
+    val isInputValid = uiState.collectAsStateWithLifecycle().value.isInputValid
+    val hasException = uiState.collectAsStateWithLifecycle().value.exception
+    if (hasException!=null){
+        when(hasException){
+            is TextFieldException->{
+                val (e,uiErr) =uiState.value.exception to uiState.value.uiText
+                if (e!=null){
+                    Toast.makeText(LocalContext.current,uiErr?.asString(LocalContext.current),Toast.LENGTH_LONG).show()
+                    action.invoke(SignUpUiAction.UiErrorShown)
+                }
+            }
+        }
+    }
+    if (isInputValid){
+        Toast.makeText(LocalContext.current,"Form Valid",Toast.LENGTH_LONG).show()
+    }
+
 }
 
 
