@@ -1,18 +1,15 @@
 package com.example.composesignup.feature.onboard.presentation
 
 import android.util.Log
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.example.composesignup.core.utils.TextFieldException
+import com.example.composesignup.utlis.UiText
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 private const val Tag = "SignUpViewModel"
 class SignUpViewModel:ViewModel() {
@@ -33,7 +30,6 @@ class SignUpViewModel:ViewModel() {
 
     val action:(SignUpUiAction)->Unit
     init {
-        setValidationMessages()
         action = {
             onUiAction(it)
         }
@@ -58,14 +54,12 @@ class SignUpViewModel:ViewModel() {
                         _uiState.update {
                             it.copy(
                                 isPasswordSizeValid = true,
-                                isCredentialsValid = true
                             )
                         }
                     }else{
                         _uiState.update {
                             it.copy(
                                 isPasswordSizeValid = false,
-                                isCredentialsValid = false
                             )
                         }
                     }
@@ -73,6 +67,7 @@ class SignUpViewModel:ViewModel() {
             }
             is SignUpUiAction.ConfirmPassword->{
                 confirmPassword = action.password
+                confirmPassword()
                 Log.d(Tag, "onUiAction() called with: confirmPassword = ${action.password}")
             }
             is SignUpUiAction.ToggleTermsAndCondition->{
@@ -83,68 +78,82 @@ class SignUpViewModel:ViewModel() {
                     )
                 }
             }
-        }
-    }
-    private fun toggleHelperTextColor(id:String="1"){
-        val data = uiState.value.validationMessages.listIterator()
-        while (data.hasNext()){
-            val currentItem = data.next()
-            if (currentItem.id==id && !currentItem.isInputValid){
-                data.set(currentItem.copy(isInputValid = true))
+            is SignUpUiAction.UiErrorShown->{
+                uiErrorShown()
             }
         }
     }
 
-    private fun setValidationStatus(isValid:Boolean){
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    isCredentialsValid = isValid
-                )
-            }
-        }
-    }
-    private fun setValidationMessages(){
-        viewModelScope.launch (){
-            val tempList = uiState.value.validationMessages
-            tempList.addAll(getValidationMessages().toMutableStateList())
-            _uiState.update {
-                it.copy(
-                    validationMessages = tempList
-                )
-            }
-        }
-    }
-    private fun getValidationMessages(): ArrayList<ValidationMessage> {
-        return arrayListOf(
-            ValidationMessage(message = "At Least 8 Characters", isInputValid = false, id = "1"),
-            ValidationMessage(message = "At Least 1 number", isInputValid = false, id = "2"),
-            ValidationMessage(message = "Both Upper Case and Lower Case Letters", isInputValid = false, id = "3")
-        )
-    }
     private fun isPasswordValid(password:String):Boolean{
         val pattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$".toRegex()
         return password.matches(pattern)
     }
+
+    private fun confirmPassword(){
+        val password = this.password
+        val confirmPassword = this.confirmPassword
+        if (password==confirmPassword){
+            _uiState.update {
+                it.copy(
+                    isPasswordMatching = true
+                )
+            }
+        }else{
+            _uiState.update {
+                it.copy(
+                    isPasswordMatching = false
+                )
+            }
+        }
+    }
     private fun validateUserInput(){
-        if (userName.isNotEmpty()){
+        val isPasswordConfirmed = uiState.value.isPasswordMatching
+        val isTermsAccepted = uiState.value.isTermsAccepted
+        if (userName.isNotEmpty() && isPasswordConfirmed && email.isNotEmpty()
+            && isTermsAccepted){
             _uiState.update {
                 it.copy(
                     isInputValid = true
                 )
             }
+        }else if (userName.isNotEmpty() && isPasswordConfirmed && email.isNotEmpty()
+            && !isTermsAccepted ){
+            _uiState.update {
+                it.copy(
+                    isInputValid = false,
+                    exception = TextFieldException(),
+                    uiText = UiText.DynamicString("Please Accept Terms and Condition")
+
+                )
+            }
+        } else{
+            _uiState.update {
+                it.copy(
+                    isInputValid = false,
+                    exception = TextFieldException(),
+                    uiText = UiText.DynamicString("Please Enter All the required fields")
+                )
+            }
         }
     }
-
+    private fun uiErrorShown(){
+        _uiState.update {
+            it.copy(
+                exception = null,
+                uiText = null
+            )
+        }
+    }
 
 }
 data class SignUpUiState(
     val isCredentialsValid:Boolean = false,
-    val validationMessages:SnapshotStateList<ValidationMessage> = SnapshotStateList(),
-    val isPasswordTyping:Boolean = false,
+    val isPasswordMatching:Boolean = false,
     val isPasswordSizeValid:Boolean = false,
     val isTermsAccepted:Boolean = false,
-    val isInputValid:Boolean  = false
+    val isInputValid:Boolean  = false,
+    val uiText: UiText?=null,
+    val exception:Exception?=null
 )
 sealed class SignUpUiAction{
     data object SignUp:SignUpUiAction()
@@ -153,11 +162,5 @@ sealed class SignUpUiAction{
     data class Email(val email:String):SignUpUiAction()
     data class Password(val password:String):SignUpUiAction()
     data class ConfirmPassword(val password:String):SignUpUiAction()
-
+    data object UiErrorShown:SignUpUiAction()
 }
-@Immutable
-data class ValidationMessage(
-    val id:String = "0",
-    val message:String="",
-    val isInputValid:Boolean
-)
