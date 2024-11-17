@@ -28,7 +28,7 @@ fun ComposeSignUpButton(
     shape: androidx.compose.ui.graphics.Shape = ButtonShape,
     text:String = "Next",
     textColor:Color= Green80,
-    backgroundColor: Color = Green40.copy(alpha = 0.4f),
+    backgroundColor: Color = Green40,
     borderColor:Color = Green40,
     borderWidth: Dp = 2.dp,
     onClick:()->Unit,
