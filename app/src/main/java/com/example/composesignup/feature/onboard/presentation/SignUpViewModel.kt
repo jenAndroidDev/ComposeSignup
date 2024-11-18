@@ -18,6 +18,7 @@ class SignUpViewModel:ViewModel() {
     /**
      * Storing User Inputs in Ui State is Avoided as
      * reactive streams causes delays in updating the TextField.
+     *
      */
     var userName by mutableStateOf("")
         private set
