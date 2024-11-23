@@ -38,7 +38,7 @@ fun ComposeSignUpButton(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxWidth()
             .height(ButtonHeight)
-            .padding(start = 16.dp, end = 16.dp)
+            .padding(start = 12.dp, end = 12.dp)
             .background(color = backgroundColor, shape = shape)
             .border(border = BorderStroke(width = borderWidth, color = borderColor),
                 shape = shape)
@@ -53,7 +53,7 @@ fun ComposeSignUpButton(
             )
     }
 }
-private val ButtonShape = RoundedCornerShape(size = 10.dp)
+private val ButtonShape = RoundedCornerShape(size = 8.dp)
 private val ButtonHeight = 50.dp
 
 @Preview

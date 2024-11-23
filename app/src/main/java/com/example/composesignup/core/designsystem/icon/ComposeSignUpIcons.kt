@@ -23,4 +23,5 @@ object ComposeSignUpIcons {
 }
 object ComposeSignupVectors{
     val SuccessTick = R.drawable.ic_success_tick
+    val PasswordEye = R.drawable.ic_password_eye
 }
