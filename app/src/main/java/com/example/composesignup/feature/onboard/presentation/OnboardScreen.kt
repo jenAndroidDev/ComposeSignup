@@ -1,15 +1,20 @@
 package com.example.composesignup.feature.onboard.presentation
 
+import android.preference.PreferenceActivity.Header
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
@@ -20,6 +25,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.example.composesignup.R
 import com.example.composesignup.ui.theme.GREY20
 import com.example.composesignup.ui.theme.Green80
 import kotlinx.coroutines.launch
@@ -29,7 +37,10 @@ fun OnboardScreen(
     modifier: Modifier,
 
 ){
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()
+        .background(color = GREY20)) {
+        Header(modifier = modifier)
+        Spacer(modifier = modifier.height(8.dp))
         OnboardTabContainer(modifier = Modifier)
     }
 
@@ -92,5 +103,21 @@ private fun OnboardTabContainer(modifier: Modifier){
                 }
             }
         }
+    }
+}
+@Composable
+private fun Header(modifier: Modifier){
+    Column(verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = stringResource(R.string.welcome_text),
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Spacer(modifier = modifier.height(12.dp))
+        Text(
+            text = stringResource(R.string.onboard_hint),
+            style = MaterialTheme.typography.labelSmall
+        )
+
     }
 }
