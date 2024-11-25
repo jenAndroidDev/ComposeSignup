@@ -48,8 +48,6 @@ fun LoginScreen(
         Spacer(modifier = modifier.height(12.dp))
 
     }
-
-
 }
 @Composable
 private fun LoginTextFields(
@@ -58,7 +56,7 @@ private fun LoginTextFields(
     uiAction: (LoginUiAction) -> Unit
 ){
     Column(modifier = modifier.fillMaxSize()) {
-        Spacer(modifier = modifier.height(16.dp))
+        Spacer(modifier = modifier.height(24.dp))
         ComposeSignUpTextField(
             modifier = modifier,
             value = viewModel.email,
@@ -69,7 +67,7 @@ private fun LoginTextFields(
         ) {
             uiAction.invoke(LoginUiAction.Email(it))
         }
-        Spacer(modifier = modifier.height(8.dp))
+        Spacer(modifier = modifier.height(16.dp))
         ComposeSignUpTextField(
             modifier = modifier,
             value = viewModel.password,
