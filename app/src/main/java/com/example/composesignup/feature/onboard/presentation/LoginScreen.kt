@@ -15,8 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,8 +48,6 @@ fun LoginScreen(
         Spacer(modifier = modifier.height(12.dp))
 
     }
-
-
 }
 @Composable
 private fun LoginTextFields(
@@ -60,7 +56,7 @@ private fun LoginTextFields(
     uiAction: (LoginUiAction) -> Unit
 ){
     Column(modifier = modifier.fillMaxSize()) {
-        Spacer(modifier = modifier.height(16.dp))
+        Spacer(modifier = modifier.height(24.dp))
         ComposeSignUpTextField(
             modifier = modifier,
             value = viewModel.email,
@@ -71,7 +67,7 @@ private fun LoginTextFields(
         ) {
             uiAction.invoke(LoginUiAction.Email(it))
         }
-        Spacer(modifier = modifier.height(8.dp))
+        Spacer(modifier = modifier.height(16.dp))
         ComposeSignUpTextField(
             modifier = modifier,
             value = viewModel.password,

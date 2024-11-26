@@ -1,8 +1,10 @@
 package com.example.composesignup
 
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -15,6 +17,7 @@ import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.example.composesignup.feature.onboard.presentation.LoginScreen
 import com.example.composesignup.feature.onboard.presentation.LoginUiAction
+import com.example.composesignup.feature.onboard.presentation.OnboardScreen
 import com.example.composesignup.feature.onboard.presentation.SignUpScreen
 import com.example.composesignup.feature.welcome.navigation.WELCOME_ROUTE
 import com.example.composesignup.ui.theme.ComposeSignupTheme
@@ -32,7 +35,14 @@ class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainActivityViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.light(
+                Color.TRANSPARENT,Color.TRANSPARENT
+            ),
+            navigationBarStyle = SystemBarStyle.light(
+                Color.TRANSPARENT,Color.TRANSPARENT
+            )
+        )
         setContent {
             ComposeSignupTheme {
                 val isWelcomeScreenShown = runBlocking {
@@ -45,7 +55,8 @@ class MainActivity : ComponentActivity() {
 //                val appState = rememberComposeSignUpState()
 //                ComposeSignUpApp(appState = appState, startDestination = startDestination)
                 //SignUpScreen()
-                LoginScreen(modifier = Modifier)
+                //LoginScreen(modifier = Modifier)
+                OnboardScreen(modifier = Modifier)
             }
         }
     }
