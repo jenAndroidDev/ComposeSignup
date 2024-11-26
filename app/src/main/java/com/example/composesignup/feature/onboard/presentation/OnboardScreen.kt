@@ -1,14 +1,17 @@
 package com.example.composesignup.feature.onboard.presentation
 
-import android.preference.PreferenceActivity.Header
+
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
@@ -26,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composesignup.R
 import com.example.composesignup.ui.theme.GREY20
@@ -35,12 +39,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun OnboardScreen(
     modifier: Modifier,
-
 ){
     Column(modifier = modifier.fillMaxSize()
-        .background(color = GREY20)) {
+        .background(color = GREY20)
+        .windowInsetsPadding(WindowInsets.statusBars)) {
         Header(modifier = modifier)
-        Spacer(modifier = modifier.height(8.dp))
         OnboardTabContainer(modifier = Modifier)
     }
 
@@ -64,7 +67,7 @@ private fun OnboardTabContainer(modifier: Modifier){
     Column(modifier = modifier.fillMaxWidth()) {
         val coroutineScope = rememberCoroutineScope()
         TabRow(
-            containerColor = GREY20,
+            containerColor = Color.White,
             selectedTabIndex = pagerState.currentPage,
             indicator = {tabPositions ->
                 if (pagerState.currentPage<tabItems.size) {
@@ -107,17 +110,29 @@ private fun OnboardTabContainer(modifier: Modifier){
 }
 @Composable
 private fun Header(modifier: Modifier){
-    Column(verticalArrangement = Arrangement.Center,
+    Column(
+        modifier = modifier.fillMaxWidth()
+            .background(color = Color.White),
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
+        Spacer(modifier = modifier.height(12.dp))
         Text(
             text = stringResource(R.string.welcome_text),
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.headlineSmall,
+
         )
         Spacer(modifier = modifier.height(12.dp))
         Text(
             text = stringResource(R.string.onboard_hint),
-            style = MaterialTheme.typography.labelSmall
+            style = MaterialTheme.typography.labelSmall,
+            color = Color.DarkGray
         )
-
     }
 }
+
+@Preview
+@Composable
+private fun PreviewOnboardScreen(){
+    OnboardScreen(modifier = Modifier)
+}
+
