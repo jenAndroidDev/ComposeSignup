@@ -130,7 +130,7 @@ private fun Header(modifier: Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = modifier.height(24.dp))
-        AppHeader(modifier = modifier)
+        AppHeader(modifier = modifier.padding(end = 8.dp))
         Spacer(modifier = modifier.height(18.dp))
         Text(
             text = stringResource(R.string.welcome_text),

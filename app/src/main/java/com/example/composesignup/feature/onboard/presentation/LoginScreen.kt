@@ -24,6 +24,7 @@ import com.example.composesignup.core.designsystem.components.ComposeSignUpButto
 import com.example.composesignup.core.designsystem.components.ComposeSignUpTextField
 import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
 import com.example.composesignup.ui.theme.GREY20
+import com.example.composesignup.ui.theme.GreyWhite
 import kotlinx.coroutines.flow.StateFlow
 
 @Composable
@@ -35,7 +36,7 @@ fun LoginScreen(
 ) {
     Column(modifier  = modifier
         .fillMaxSize()
-        .background(color = GREY20.copy(alpha = 1f))
+        .background(color = GreyWhite)
         .padding(12.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
