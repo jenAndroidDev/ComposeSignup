@@ -36,6 +36,7 @@ import com.example.composesignup.core.utils.TextFieldException
 import com.example.composesignup.ui.theme.GREY20
 import com.example.composesignup.ui.theme.Green40
 import com.example.composesignup.ui.theme.Green80
+import com.example.composesignup.ui.theme.GreyWhite
 import kotlinx.coroutines.flow.StateFlow
 
 /*
@@ -58,7 +59,7 @@ fun SignUpScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(color = GREY20.copy(alpha = 1f))
+            .background(color = GreyWhite)
             .padding(12.dp)
     ) {
         SignUpTextFields(
