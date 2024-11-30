@@ -39,15 +39,12 @@ import com.example.composesignup.ui.theme.Green80
 import kotlinx.coroutines.flow.StateFlow
 
 /*
-* 1.Do not hardcode the strings=>Done
-* 2.Form Validation=>Done
 * 3.Navigate To Dashboard Screen
 * 4.Replace TrailIcon in Text Field Screen
-* 5.Confirm Password Validation.=>Done
 * 6.Design Alignment
 * 7.Unit Test and Check For Any Recompositions During State Changes
 * */
-private val TopPadding = 40.dp
+private val TopPadding = 24.dp
 private val TextFieldPadding = 16.dp
 private const val Tag = "SignUpScreen"
 
