@@ -5,14 +5,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.core.utils.TextFieldException
 import com.example.composesignup.utlis.UiText
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private const val Tag = "SignUpViewModel"
-class SignUpViewModel:ViewModel() {
+@HiltViewModel
+class SignUpViewModel @Inject constructor(
+    private val sessionManager: SessionManager
+):ViewModel() {
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState = _uiState.asStateFlow()
     /**
@@ -112,9 +121,20 @@ class SignUpViewModel:ViewModel() {
         val isTermsAccepted = uiState.value.isTermsAccepted
         if (userName.isNotEmpty() && isPasswordConfirmed && email.isNotEmpty()
             && isTermsAccepted){
+            viewModelScope.launch(Dispatchers.IO) {
+                sessionManager.apply {
+                    setUserName(userName)
+                    setUserEmail(email)
+                    setUserPassword(password)
+                }.also {
+                    it.setSignUpStatus(true)
+                }
+            }
             _uiState.update {
                 it.copy(
-                    isInputValid = true
+                    isInputValid = true,
+                    exception = TextFieldException(),
+                    uiText = UiText.DynamicString(value = "Successfully Created Account.Please Login In.")
                 )
             }
         }else if (userName.isNotEmpty() && isPasswordConfirmed && email.isNotEmpty()
@@ -145,7 +165,6 @@ class SignUpViewModel:ViewModel() {
             )
         }
     }
-
 }
 data class SignUpUiState(
     val isCredentialsValid:Boolean = false,

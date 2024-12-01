@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.map
+import kotlin.math.sign
 
 class SessionManager(val context:Context) {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("ComposeSignUp")
@@ -54,5 +55,11 @@ class SessionManager(val context:Context) {
     }
     suspend fun getUserLoginStatus() =context.dataStore.data.map {
         it[LOGIN]
+    }
+    suspend fun setSignUpStatus(signupStatus:Boolean) = context.dataStore.edit {
+        it[SIGNUP] = signupStatus
+    }
+    suspend fun getSignupStatus() = context.dataStore.data.map {
+        it[SIGNUP]
     }
 }
