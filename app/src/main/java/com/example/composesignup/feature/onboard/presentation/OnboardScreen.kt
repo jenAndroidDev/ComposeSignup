@@ -42,6 +42,8 @@ import com.example.composesignup.ui.theme.Green80
 import com.example.composesignup.ui.theme.fontFamily
 import kotlinx.coroutines.launch
 
+/*
+* 1.Enable Edge to Edge*/
 private const val Tag = "OnboardScreen"
 @Composable
 fun OnboardScreen(

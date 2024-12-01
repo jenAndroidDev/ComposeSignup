@@ -33,17 +33,17 @@ import com.example.composesignup.core.designsystem.components.ComposeSignUpButto
 import com.example.composesignup.core.designsystem.components.ComposeSignUpTextField
 import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
 import com.example.composesignup.core.utils.TextFieldException
-import com.example.composesignup.ui.theme.GREY20
 import com.example.composesignup.ui.theme.Green40
 import com.example.composesignup.ui.theme.Green80
 import com.example.composesignup.ui.theme.GreyWhite
 import kotlinx.coroutines.flow.StateFlow
 
 /*
-* 3.Navigate To Dashboard Screen
-* 4.Replace TrailIcon in Text Field Screen
-* 6.Design Alignment
-* 7.Unit Test and Check For Any Recompositions During State Changes
+* 1.Navigate To Dashboard Screen
+* 2.Replace TrailIcon in Text Field Screen
+* 3.Design Alignment
+* 4.Unit Test and Check For Any Recompositions During State Changes
+* 5.Change the Terms and Condition Button as Per Design.
 * */
 private val TopPadding = 24.dp
 private val TextFieldPadding = 16.dp
