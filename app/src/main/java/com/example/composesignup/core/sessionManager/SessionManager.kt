@@ -8,9 +8,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.map
-import kotlin.math.sign
 
-class SessionManager(val context:Context) {
+
+class SessionManager(private val context:Context) {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("ComposeSignUp")
     companion object{
         val welcomeScreenShown = booleanPreferencesKey("welcome_screen")
