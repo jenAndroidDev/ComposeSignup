@@ -10,6 +10,7 @@ import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.core.utils.TextFieldException
 import com.example.composesignup.utlis.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
@@ -37,7 +38,6 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
     private var userPassword:String = ""
 
     init {
-
         action ={
             onUiAction(it)
         }
@@ -59,13 +59,24 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
                 email = action.email
             }
             is LoginUiAction.ForgotPassword->{
-
+                _uiState.update {
+                    it.copy(
+                        navToPasswordScreen = true
+                    )
+                }
             }
             is LoginUiAction.UiErrorShown->{
                 _uiState.update {
                     it.copy(
                         exception = null,
                         uiText = null
+                    )
+                }
+            }
+            is LoginUiAction.ResetNavOptions->{
+                _uiState.update {
+                    it.copy(
+                        navToPasswordScreen = false
                     )
                 }
             }
@@ -90,16 +101,27 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
             }
         }
     }
+    private fun resetNavOptions(){
+        viewModelScope.launch (Dispatchers.IO){
+            _uiState.update {
+                it.copy(
+                    navToPasswordScreen = false
+                )
+            }
+        }
+    }
 }
 data class LoginUiState(
     val isValid:Boolean = false,
     val exception: Exception?=null,
-    val uiText: UiText?=null
+    val uiText: UiText?=null,
+    val navToPasswordScreen:Boolean = false
 )
 sealed class LoginUiAction{
     data object Login:LoginUiAction()
     data object ForgotPassword:LoginUiAction()
     data object UiErrorShown:LoginUiAction()
+    data object ResetNavOptions:LoginUiAction()
     data class Email(val email:String):LoginUiAction()
     data class Password(val password:String):LoginUiAction()
 }

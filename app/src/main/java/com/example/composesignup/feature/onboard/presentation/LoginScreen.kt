@@ -27,7 +27,6 @@ import com.example.composesignup.core.designsystem.components.ComposeSignUpButto
 import com.example.composesignup.core.designsystem.components.ComposeSignUpTextField
 import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
 import com.example.composesignup.core.utils.TextFieldException
-import com.example.composesignup.ui.theme.GREY20
 import com.example.composesignup.ui.theme.GreyWhite
 import kotlinx.coroutines.flow.StateFlow
 
@@ -65,6 +64,10 @@ private fun LoginTextFields(
     viewModel: LoginViewModel,
     uiAction: (LoginUiAction) -> Unit
 ){
+    val navigateToForgotPasswordScreen = viewModel.uiState.collectAsStateWithLifecycle().value.navToPasswordScreen
+    if (navigateToForgotPasswordScreen){
+
+    }
     Column(modifier = modifier.fillMaxSize()) {
         Spacer(modifier = modifier.height(24.dp))
         ComposeSignUpTextField(
