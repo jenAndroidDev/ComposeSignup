@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,17 +39,28 @@ class SignUpViewModel @Inject constructor(
     var confirmPassword by mutableStateOf("")
         private set
 
+    private var hasUserSignedIn:Boolean = false
+
     val action:(SignUpUiAction)->Unit
     init {
         action = {
             onUiAction(it)
         }
+        viewModelScope.launch {
+            hasUserSignedIn = sessionManager.getSignupStatus().firstOrNull()?:false
+        }
+
 
     }
     private fun onUiAction(action: SignUpUiAction){
         when(action){
             is SignUpUiAction.SignUp->{
-                validateUserInput()
+                if (!hasUserSignedIn) validateUserInput() else _uiState.update {
+                    it.copy(
+                        exception = TextFieldException(),
+                        uiText = UiText.DynamicString("You Have Already Signed In Please Log in to Continue")
+                    )
+                }
             }
             is SignUpUiAction.Email->{
                 email = action.email
