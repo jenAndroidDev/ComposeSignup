@@ -12,6 +12,8 @@
     <string name="something_went_wrong_try_later">Something went wrong! try again later.</string>
     <string name="check_your_internet">Please check your internet connection!</string>
     <string name="welcome_text">Welcome to Tasktugas</string>
-    <string name="onboard_hint">Signup or login below to manage your project,tasks and productivity</string>
+    <string name="onboard_description">Signup or login below to manage your project,tasks and productivity</string>
     <string name="app_logo">app_logo</string>
+    <string name="forgot_password_title">Forgot Password</string>
+    <string name="forgot_password_description">Enter your email account to reset password</string>
 </resources>
