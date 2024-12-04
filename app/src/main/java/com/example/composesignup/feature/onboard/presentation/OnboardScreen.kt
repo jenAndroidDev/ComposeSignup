@@ -1,6 +1,7 @@
 package com.example.composesignup.feature.onboard.presentation
 
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,18 +49,21 @@ private const val Tag = "OnboardScreen"
 @Composable
 fun OnboardScreen(
     modifier: Modifier,
+    onForgotPasswordClick:()->Unit
 ){
     Column(modifier = modifier
         .fillMaxSize()
         .background(color = GREY20)
         .windowInsetsPadding(WindowInsets.statusBars)) {
         Header(modifier = modifier)
-        OnboardTabContainer(modifier = Modifier)
+        OnboardTabContainer(modifier = Modifier,
+            onForgotPasswordClick = onForgotPasswordClick)
     }
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun OnboardTabContainer(modifier: Modifier){
+private fun OnboardTabContainer(modifier: Modifier,
+                                onForgotPasswordClick: () -> Unit){
     val tabItems = listOf(
         OnboardTabItem(
             selectedIcon = Icons.Filled.Home,
@@ -112,7 +116,10 @@ private fun OnboardTabContainer(modifier: Modifier){
         ) { index ->
             when (index) {
                 0->{
-                   LoginScreen(modifier = modifier)
+                   LoginScreen(modifier = modifier){
+                       Log.d(Tag, "OnboardTabContainer() called")
+                       onForgotPasswordClick.invoke()
+                   }
                 }
                 1->{
                     SignUpScreen(modifier = modifier)
@@ -160,6 +167,6 @@ private val RoundedCornerRadius = 12.dp
 @Preview
 @Composable
 private fun PreviewOnboardScreen(){
-    OnboardScreen(modifier = Modifier)
+    OnboardScreen(modifier = Modifier, onForgotPasswordClick = {})
 }
 

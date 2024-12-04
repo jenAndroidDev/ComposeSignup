@@ -1,6 +1,7 @@
 package com.example.composesignup.feature.onboard.presentation
 
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,7 +28,6 @@ import com.example.composesignup.core.designsystem.components.ComposeSignUpButto
 import com.example.composesignup.core.designsystem.components.ComposeSignUpTextField
 import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
 import com.example.composesignup.core.utils.TextFieldException
-import com.example.composesignup.ui.theme.GREY20
 import com.example.composesignup.ui.theme.GreyWhite
 import kotlinx.coroutines.flow.StateFlow
 
@@ -35,12 +35,14 @@ import kotlinx.coroutines.flow.StateFlow
 * TODO==>Form Validation
 *  2.Trailing Icon in Text Fields
 *  3.*/
+private const val Tag = "LoginScreen"
 @Composable
 fun LoginScreen(
     modifier: Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
     uiState:StateFlow<LoginUiState> = viewModel.uiState,
-    uiAction: (LoginUiAction)->Unit = viewModel.action
+    uiAction: (LoginUiAction)->Unit = viewModel.action,
+    onForgotPasswordClick:()->Unit = {}
 ) {
     Column(modifier  = modifier
         .fillMaxSize()
@@ -52,19 +54,29 @@ fun LoginScreen(
         LoginTextFields(
             modifier = modifier,
             viewModel = viewModel,
-            uiAction = uiAction
+            uiAction = uiAction,
+            onForgotPasswordClick = onForgotPasswordClick
         )
         Spacer(modifier = modifier.height(12.dp))
         UiError(uiState = uiState,uiAction)
-
     }
 }
 @Composable
 private fun LoginTextFields(
     modifier: Modifier,
     viewModel: LoginViewModel,
-    uiAction: (LoginUiAction) -> Unit
+    uiAction: (LoginUiAction) -> Unit,
+    onForgotPasswordClick: () -> Unit
 ){
+    val navigateToForgotPasswordScreen = viewModel.uiState.collectAsStateWithLifecycle().value.navToPasswordScreen
+    if (navigateToForgotPasswordScreen){
+        Log.d(
+            Tag,
+            "LoginTextFields() called with: modifier = $modifier, viewModel = $viewModel, uiAction = $uiAction, onForgotPasswordClick = $navigateToForgotPasswordScreen"
+        )
+        onForgotPasswordClick.invoke()
+        uiAction.invoke(LoginUiAction.ResetNavOptions)
+    }
     Column(modifier = modifier.fillMaxSize()) {
         Spacer(modifier = modifier.height(24.dp))
         ComposeSignUpTextField(
