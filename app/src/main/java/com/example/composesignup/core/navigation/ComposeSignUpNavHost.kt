@@ -1,5 +1,6 @@
 package com.example.composesignup.core.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -12,6 +13,7 @@ import com.example.composesignup.feature.welcome.navigation.welcomeScreen
 
 /*
 * All */
+private const val Tag = "ComposeSignupNavHost"
 @Composable
 fun ComposeSignUpNavHost(
     modifier: Modifier,
@@ -33,6 +35,7 @@ fun ComposeSignUpNavHost(
         searchScreen()
         detailScreen()
         onboardScreen {
+            Log.d(Tag, "ComposeSignUpNavHost() Onboard")
             appState.navigateToForgotPasswordScreen()
         }
         forgotPasswordScreen()

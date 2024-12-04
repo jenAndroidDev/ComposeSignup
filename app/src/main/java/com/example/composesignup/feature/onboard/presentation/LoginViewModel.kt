@@ -74,11 +74,7 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
                 }
             }
             is LoginUiAction.ResetNavOptions->{
-                _uiState.update {
-                    it.copy(
-                        navToPasswordScreen = false
-                    )
-                }
+                resetNavOptions()
             }
         }
     }

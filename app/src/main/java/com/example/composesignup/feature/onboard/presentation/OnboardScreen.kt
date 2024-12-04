@@ -1,6 +1,7 @@
 package com.example.composesignup.feature.onboard.presentation
 
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -116,6 +117,7 @@ private fun OnboardTabContainer(modifier: Modifier,
             when (index) {
                 0->{
                    LoginScreen(modifier = modifier){
+                       Log.d(Tag, "OnboardTabContainer() called")
                        onForgotPasswordClick.invoke()
                    }
                 }

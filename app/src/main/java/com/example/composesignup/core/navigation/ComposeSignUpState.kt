@@ -15,6 +15,7 @@ import androidx.navigation.navOptions
 import com.example.composesignup.feature.detail.navigation.navigateDetails
 import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.example.composesignup.feature.foryou.navigation.navigateForYou
+import com.example.composesignup.feature.onboard.navigation.navigateToForgotPassword
 import com.example.composesignup.feature.onboard.navigation.navigateToOnboard
 import com.example.composesignup.feature.search.navigation.SEARCH_ROUTE
 import com.example.composesignup.feature.search.navigation.navigateSearch
@@ -76,7 +77,7 @@ class ComposeSignUpState(
 
     fun navigateToDetailScreen() = navController.navigateDetails()
 
-    fun navigateToForgotPasswordScreen() = navController.navigateToOnboard()
+    fun navigateToForgotPasswordScreen() = navController.navigateToForgotPassword()
 
 
 

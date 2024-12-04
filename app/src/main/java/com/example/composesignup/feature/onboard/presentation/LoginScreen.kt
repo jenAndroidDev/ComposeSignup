@@ -1,6 +1,7 @@
 package com.example.composesignup.feature.onboard.presentation
 
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,6 +35,7 @@ import kotlinx.coroutines.flow.StateFlow
 * TODO==>Form Validation
 *  2.Trailing Icon in Text Fields
 *  3.*/
+private const val Tag = "LoginScreen"
 @Composable
 fun LoginScreen(
     modifier: Modifier,
@@ -57,7 +59,6 @@ fun LoginScreen(
         )
         Spacer(modifier = modifier.height(12.dp))
         UiError(uiState = uiState,uiAction)
-
     }
 }
 @Composable
@@ -69,7 +70,12 @@ private fun LoginTextFields(
 ){
     val navigateToForgotPasswordScreen = viewModel.uiState.collectAsStateWithLifecycle().value.navToPasswordScreen
     if (navigateToForgotPasswordScreen){
+        Log.d(
+            Tag,
+            "LoginTextFields() called with: modifier = $modifier, viewModel = $viewModel, uiAction = $uiAction, onForgotPasswordClick = $navigateToForgotPasswordScreen"
+        )
         onForgotPasswordClick.invoke()
+        uiAction.invoke(LoginUiAction.ResetNavOptions)
     }
     Column(modifier = modifier.fillMaxSize()) {
         Spacer(modifier = modifier.height(24.dp))
