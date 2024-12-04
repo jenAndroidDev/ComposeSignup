@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
-
 }
 
 android {
@@ -64,7 +63,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-
+    //hilt
     implementation(libs.hilt.android)
     implementation(libs.material)
     ksp(libs.hilt.compiler)
@@ -74,6 +73,8 @@ dependencies {
     implementation(libs.hilt.navigation)
     //dataStore
     implementation(libs.androidx.datastore)
+    //splashscreen
+    implementation(libs.androidx.splash.screen)
 
 
 

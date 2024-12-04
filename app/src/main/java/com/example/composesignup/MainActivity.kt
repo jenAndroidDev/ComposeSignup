@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.composesignup.core.navigation.rememberComposeSignUpState
 import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.feature.onboard.navigation.ONBOARD_ROUTE
@@ -30,6 +31,7 @@ class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainActivityViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.light(
                 Color.TRANSPARENT,Color.TRANSPARENT
