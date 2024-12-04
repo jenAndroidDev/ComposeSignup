@@ -15,9 +15,9 @@ import androidx.navigation.navOptions
 import com.example.composesignup.feature.detail.navigation.navigateDetails
 import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.example.composesignup.feature.foryou.navigation.navigateForYou
+import com.example.composesignup.feature.onboard.navigation.navigateToOnboard
 import com.example.composesignup.feature.search.navigation.SEARCH_ROUTE
 import com.example.composesignup.feature.search.navigation.navigateSearch
-import com.example.composesignup.feature.welcome.navigation.WELCOME_ROUTE
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -42,7 +42,6 @@ class ComposeSignUpState(
     val navController: NavHostController,
     coroutineScope: CoroutineScope
 ) {
-
     val currentDestination:NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
@@ -76,6 +75,8 @@ class ComposeSignUpState(
     }
 
     fun navigateToDetailScreen() = navController.navigateDetails()
+
+    fun navigateToForgotPasswordScreen() = navController.navigateToOnboard()
 
 
 

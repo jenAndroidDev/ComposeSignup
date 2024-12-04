@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.composesignup.core.navigation.rememberComposeSignUpState
 import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
+import com.example.composesignup.feature.onboard.navigation.ONBOARD_ROUTE
 import com.example.composesignup.feature.onboard.presentation.LoginScreen
 import com.example.composesignup.feature.onboard.presentation.LoginUiAction
 import com.example.composesignup.feature.onboard.presentation.OnboardScreen
@@ -48,15 +49,17 @@ class MainActivity : ComponentActivity() {
                 val isWelcomeScreenShown = runBlocking {
                     sessionManager.isWelcomeScreenShown().firstOrNull()?:false
                 }
-               val startDestination = if (!isWelcomeScreenShown){
-                   WELCOME_ROUTE
-                }else FOR_YOU_ROUTE
+//               val startDestination = if (!isWelcomeScreenShown){
+//                   WELCOME_ROUTE
+//                }else FOR_YOU_ROUTE
 
-//                val appState = rememberComposeSignUpState()
-//                ComposeSignUpApp(appState = appState, startDestination = startDestination)
+                val startDestination = ONBOARD_ROUTE
+
+                val appState = rememberComposeSignUpState()
+                ComposeSignUpApp(appState = appState, startDestination = startDestination)
                 //SignUpScreen()
                 //LoginScreen(modifier = Modifier)
-                OnboardScreen(modifier = Modifier)
+                //OnboardScreen(modifier = Modifier)
             }
         }
     }

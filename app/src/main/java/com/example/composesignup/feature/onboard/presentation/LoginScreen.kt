@@ -39,7 +39,8 @@ fun LoginScreen(
     modifier: Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
     uiState:StateFlow<LoginUiState> = viewModel.uiState,
-    uiAction: (LoginUiAction)->Unit = viewModel.action
+    uiAction: (LoginUiAction)->Unit = viewModel.action,
+    onForgotPasswordClick:()->Unit = {}
 ) {
     Column(modifier  = modifier
         .fillMaxSize()
@@ -51,7 +52,8 @@ fun LoginScreen(
         LoginTextFields(
             modifier = modifier,
             viewModel = viewModel,
-            uiAction = uiAction
+            uiAction = uiAction,
+            onForgotPasswordClick = onForgotPasswordClick
         )
         Spacer(modifier = modifier.height(12.dp))
         UiError(uiState = uiState,uiAction)
@@ -62,11 +64,12 @@ fun LoginScreen(
 private fun LoginTextFields(
     modifier: Modifier,
     viewModel: LoginViewModel,
-    uiAction: (LoginUiAction) -> Unit
+    uiAction: (LoginUiAction) -> Unit,
+    onForgotPasswordClick: () -> Unit
 ){
     val navigateToForgotPasswordScreen = viewModel.uiState.collectAsStateWithLifecycle().value.navToPasswordScreen
     if (navigateToForgotPasswordScreen){
-
+        onForgotPasswordClick.invoke()
     }
     Column(modifier = modifier.fillMaxSize()) {
         Spacer(modifier = modifier.height(24.dp))
