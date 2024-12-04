@@ -37,7 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composesignup.R
-import com.example.composesignup.core.designsystem.components.AppHeader
+import com.example.composesignup.core.designsystem.components.ComposeSignupBrandImage
 import com.example.composesignup.ui.theme.GREY20
 import com.example.composesignup.ui.theme.Green80
 import com.example.composesignup.ui.theme.fontFamily
@@ -139,7 +139,7 @@ private fun Header(modifier: Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = modifier.height(24.dp))
-        AppHeader(modifier = modifier.padding(end = 8.dp))
+        ComposeSignupBrandImage(modifier = modifier.padding(end = 8.dp))
         Spacer(modifier = modifier.height(18.dp))
         Text(
             text = stringResource(R.string.welcome_text),

@@ -1,6 +1,6 @@
 package com.example.composesignup.feature.onboard.presentation
 
-import android.preference.PreferenceActivity.Header
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.composesignup.R
-import com.example.composesignup.core.designsystem.components.AppHeader
+import com.example.composesignup.core.designsystem.components.ComposeSignupBrandImage
 import com.example.composesignup.core.designsystem.components.ComposeSignUpButton
 import com.example.composesignup.core.designsystem.components.ComposeSignUpTextField
 import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
@@ -86,7 +86,7 @@ private fun Header(modifier: Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = modifier.height(24.dp))
-        AppHeader(modifier = modifier.padding(end = 8.dp))
+        ComposeSignupBrandImage(modifier = modifier.padding(end = 8.dp))
         Spacer(modifier = modifier.height(18.dp))
         Text(
             text = stringResource(R.string.welcome_text),
