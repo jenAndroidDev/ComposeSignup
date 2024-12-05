@@ -42,9 +42,13 @@ fun ForgotPasswordScreen(
     onCancel:()->Unit = {}
     ){
     val shouldContinue = uiState.collectAsStateWithLifecycle().value.shouldNavToOtpScreen
+    val shouldCancel = uiState.collectAsStateWithLifecycle().value.popBackStack
     if (shouldContinue){
         onContinue.invoke()
         uiAction.invoke(ForgotPasswordUiAction.ResetNavOptions)
+    }
+    if (shouldCancel){
+        onCancel.invoke()
     }
     Column(modifier = modifier.fillMaxSize()
         .background(color = Color.White)
