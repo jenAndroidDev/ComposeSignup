@@ -36,9 +36,16 @@ import kotlinx.coroutines.flow.StateFlow
 fun ForgotPasswordScreen(
     modifier: Modifier,
     viewModel: ForgotPasswordViewModel = hiltViewModel(),
-    uiState:StateFlow<ForgotPasswordUiState> = viewModel.uiState,
-    uiAction:(ForgotPasswordUiAction)->Unit = viewModel.action
+    uiState: StateFlow<ForgotPasswordUiState> = viewModel.uiState,
+    uiAction:(ForgotPasswordUiAction)->Unit = viewModel.action,
+    onContinue:()->Unit = {},
+    onCancel:()->Unit = {}
     ){
+    val shouldContinue = uiState.collectAsStateWithLifecycle().value.shouldNavToOtpScreen
+    if (shouldContinue){
+        onContinue.invoke()
+        uiAction.invoke(ForgotPasswordUiAction.ResetNavOptions)
+    }
     Column(modifier = modifier.fillMaxSize()
         .background(color = Color.White)
         ) {
@@ -52,11 +59,12 @@ fun ForgotPasswordScreen(
         ComposeSignUpTextField(
             modifier = modifier,
             placeHolder = stringResource(id = R.string.email_hint),
-            value = "",
+            value = viewModel.email,
             leadingIcon = {
                 Icon(imageVector = ComposeSignUpIcons.Email, contentDescription = null)
             }
         ) {
+            uiAction.invoke(ForgotPasswordUiAction.Email(it))
         }
         Spacer(modifier = modifier.weight(1f))
         ComposeSignUpButton(

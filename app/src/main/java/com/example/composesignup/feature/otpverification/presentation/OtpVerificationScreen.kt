@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -30,7 +29,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,14 +36,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.composesignup.core.designsystem.components.ComposeSignUpButton
+import com.example.composesignup.core.designsystem.components.ComposeSignupOnBoardHeader
 import com.example.composesignup.core.designsystem.components.HyperLinkAnnotatedText
 import com.example.composesignup.core.designsystem.components.OtpVerificationSubtitle
-import com.example.composesignup.feature.welcome.presentation.fontFamily
 import com.example.composesignup.ui.theme.GREY20
 
 private const val Tag = "OtpVerificationScreen"
 @Composable
-fun OtpVerificationScreen(modifier: Modifier){
+fun OtpVerificationScreen(
+    modifier: Modifier,
+    onClick:()->Unit={}
+    ){
 
     Column(modifier = modifier
         .fillMaxSize()
@@ -53,15 +54,10 @@ fun OtpVerificationScreen(modifier: Modifier){
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
         ) {
-        Text(
-            text = "Enter Verification Code",
-            style = MaterialTheme.typography.titleLarge,
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = modifier.padding(top = 12.dp)
-            )
-        Spacer(modifier = modifier.height(12.dp))
+        ComposeSignupOnBoardHeader(
+            modifier = modifier,
+            title = "Enter Verification Code"
+        )
         OtpVerificationSubtitle(
             helperText = "We have sent a code to",
             email = "rjjeninjoseph@gmail.com",
@@ -69,8 +65,8 @@ fun OtpVerificationScreen(modifier: Modifier){
         )
         Spacer(modifier = modifier.height(12.dp))
         EnterOtp(modifier = modifier)
-        Spacer(modifier = modifier.weight(1f) )
-        VerifyOtpButton(modifier = modifier)
+        Spacer(modifier = modifier.weight(1f))
+        OtpVerificationFooter(modifier = modifier)
     }//Column
 }
 
@@ -162,7 +158,7 @@ fun OtpView(
     )
 }
 @Composable
-fun VerifyOtpButton(modifier: Modifier){
+fun OtpVerificationFooter(modifier: Modifier){
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         ComposeSignUpButton(
             modifier = modifier,

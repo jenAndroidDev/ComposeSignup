@@ -8,6 +8,7 @@ import com.example.composesignup.feature.detail.navigation.detailScreen
 import com.example.composesignup.feature.foryou.navigation.forYouScreen
 import com.example.composesignup.feature.onboard.navigation.forgotPasswordScreen
 import com.example.composesignup.feature.onboard.navigation.onboardScreen
+import com.example.composesignup.feature.otpverification.navigation.otpVerificationScreen
 import com.example.composesignup.feature.search.navigation.searchScreen
 import com.example.composesignup.feature.welcome.navigation.welcomeScreen
 
@@ -29,16 +30,18 @@ fun ComposeSignUpNavHost(
         welcomeScreen{
             appState.navigateToTopLevelDestination(TopLevelDestinations.FOR_YOU)
         }
-        forYouScreen{
-            appState.navigateToDetailScreen()
-        }
+        forYouScreen(appState::navigateToDetailScreen)
         searchScreen()
         detailScreen()
-        onboardScreen {
-            Log.d(Tag, "ComposeSignUpNavHost() Onboard")
-            appState.navigateToForgotPasswordScreen()
+        onboardScreen(appState::navigateToForgotPasswordScreen)
+        forgotPasswordScreen({
+            appState.navigateToOtpVerificationScreen()
+        },{
+            appState.navController.popBackStack()
+        })
+        otpVerificationScreen{
+
         }
-        forgotPasswordScreen()
     }
 
 }

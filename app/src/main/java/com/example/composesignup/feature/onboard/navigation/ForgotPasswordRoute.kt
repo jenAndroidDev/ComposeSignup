@@ -8,8 +8,13 @@ import com.example.composesignup.feature.onboard.presentation.ForgotPasswordScre
 
 @Composable
 fun ForgotPasswordRoute(
-    modifier: Modifier= Modifier,
-    onClick:()->Unit
-){
-    ForgotPasswordScreen(modifier = modifier)
+    modifier: Modifier = Modifier,
+    onContinue: () -> Unit,
+    onCancel: () -> Unit
+) {
+    ForgotPasswordScreen(
+        modifier = modifier,
+        onContinue = onContinue,
+        onCancel =onCancel
+    )
 }

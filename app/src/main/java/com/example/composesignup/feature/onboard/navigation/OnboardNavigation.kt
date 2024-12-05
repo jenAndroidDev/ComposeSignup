@@ -11,7 +11,9 @@ const val ONBOARD_ROUTE = "onboard_route"
 
 fun NavController.navigateToOnboard(navOptions: NavOptions?=null) = navigate(ONBOARD_ROUTE)
 
-fun NavGraphBuilder.onboardScreen(onForgotPasswordClick:()->Unit){
+fun NavGraphBuilder.onboardScreen(
+    onForgotPasswordClick:()->Unit,
+    ){
     composable(ONBOARD_ROUTE){
         Log.d("Route", "onboardScreen() called")
         OnboardRoute(onClick = onForgotPasswordClick)
