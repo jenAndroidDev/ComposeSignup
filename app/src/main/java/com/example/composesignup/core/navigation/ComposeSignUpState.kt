@@ -17,6 +17,7 @@ import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.example.composesignup.feature.foryou.navigation.navigateForYou
 import com.example.composesignup.feature.onboard.navigation.navigateToForgotPassword
 import com.example.composesignup.feature.onboard.navigation.navigateToOnboard
+import com.example.composesignup.feature.otpverification.navigation.navigateToOtpVerificationScreen
 import com.example.composesignup.feature.search.navigation.SEARCH_ROUTE
 import com.example.composesignup.feature.search.navigation.navigateSearch
 import kotlinx.coroutines.CoroutineScope
@@ -78,6 +79,8 @@ class ComposeSignUpState(
     fun navigateToDetailScreen() = navController.navigateDetails()
 
     fun navigateToForgotPasswordScreen() = navController.navigateToForgotPassword()
+
+    fun navigateToOtpVerificationScreen() = navController.navigateToOtpVerificationScreen()
 
 
 

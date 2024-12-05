@@ -60,11 +60,7 @@ class ForgotPasswordViewModel @Inject constructor(
                 }
             }
             is ForgotPasswordUiAction.Email->{
-                _uiState.update {
-                    it.copy(
-                        email = it.email
-                    )
-                }
+                email = action.email
             }
             is ForgotPasswordUiAction.UiErrorShown->{
                 _uiState.update {
@@ -74,6 +70,16 @@ class ForgotPasswordViewModel @Inject constructor(
                     )
                 }
             }
+            is ForgotPasswordUiAction.ResetNavOptions->{
+                resetNavOptions()
+            }
+        }
+    }
+    private fun resetNavOptions(){
+        _uiState.update {
+            it.copy(
+                shouldNavToOtpScreen = false
+            )
         }
     }
 }
@@ -82,6 +88,7 @@ sealed class ForgotPasswordUiAction{
     data object Cancel:ForgotPasswordUiAction()
     data class Email(val email:String):ForgotPasswordUiAction()
     data object UiErrorShown:ForgotPasswordUiAction()
+    data object ResetNavOptions:ForgotPasswordUiAction()
 }
 data class ForgotPasswordUiState(
     val email: String="",
