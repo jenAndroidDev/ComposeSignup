@@ -134,13 +134,19 @@ class SignUpViewModel @Inject constructor(
         if (userName.isNotEmpty() && isPasswordConfirmed && email.isNotEmpty()
             && isTermsAccepted){
             viewModelScope.launch(Dispatchers.IO) {
-                sessionManager.apply {
-                    setUserName(userName)
+                with(sessionManager){
                     setUserEmail(email)
+                    setUserName(userName)
                     setUserPassword(password)
-                }.also {
-                    it.setSignUpStatus(true)
+                    setSignUpStatus(true)
                 }
+//                sessionManager.apply {
+//                    setUserName(userName)
+//                    setUserEmail(email)
+//                    setUserPassword(password)
+//                }.also {
+//                    it.setSignUpStatus(true)
+//                }
             }
             _uiState.update {
                 it.copy(

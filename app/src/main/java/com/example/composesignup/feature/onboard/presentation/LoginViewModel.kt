@@ -36,6 +36,7 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
     val action:(LoginUiAction)->Unit
     private var userEmail:String = ""
     private var userPassword:String = ""
+    private var isUserSigned:Boolean = false
 
     init {
         action ={
@@ -44,6 +45,14 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
         viewModelScope.launch {
             userEmail = (sessionManager.getUserEmail().firstOrNull()?:"").toString()
             password = (sessionManager.getUserPassword().firstOrNull()?:"").toString()
+            isUserSigned = (sessionManager.getSignupStatus().firstOrNull()?:false)
+            Log.d(Tag, "null() called...$isUserSigned")
+            val loginCredentials = LoginCredentials(userEmail,password)
+            _uiState.update {
+                it.copy(
+                    loginCredentials = loginCredentials
+                )
+            }
             Log.d(Tag, "sessionManager...$userEmail,$userPassword")
         }
     }
@@ -80,18 +89,29 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
     }
     private fun validateCredentials(){
         viewModelScope.launch {
-            if (email==userEmail&&password==userPassword){
-                _uiState.update {
-                    it.copy(
-                        isValid = true
-                    )
+            if (isUserSigned) {
+                val userCredentials = uiState.value.loginCredentials
+                if (email == userCredentials?.email && password == userCredentials.password) {
+                    _uiState.update {
+                        it.copy(
+                            isValid = true
+                        )
+                    }
+                } else {
+                    _uiState.update {
+                        it.copy(
+                            isValid = false,
+                            exception = TextFieldException(),
+                            uiText = UiText.DynamicString("Invalid Credentials")
+                        )
+                    }
                 }
             }else{
                 _uiState.update {
                     it.copy(
                         isValid = false,
                         exception = TextFieldException(),
-                        uiText = UiText.DynamicString("Invalid Credentials")
+                        uiText = UiText.DynamicString("Please Signup To Login")
                     )
                 }
             }
@@ -111,7 +131,8 @@ data class LoginUiState(
     val isValid:Boolean = false,
     val exception: Exception?=null,
     val uiText: UiText?=null,
-    val navToPasswordScreen:Boolean = false
+    val navToPasswordScreen:Boolean = false,
+    val loginCredentials: LoginCredentials?=null
 )
 sealed class LoginUiAction{
     data object Login:LoginUiAction()
@@ -121,3 +142,7 @@ sealed class LoginUiAction{
     data class Email(val email:String):LoginUiAction()
     data class Password(val password:String):LoginUiAction()
 }
+data class LoginCredentials(
+    val email:String,
+    val password:String
+)

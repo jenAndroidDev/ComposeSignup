@@ -1,6 +1,6 @@
 package com.example.composesignup.core.navigation
 
-import android.util.Log
+
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
