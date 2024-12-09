@@ -14,6 +14,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,24 +44,13 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
         action ={
             onUiAction(it)
         }
-        viewModelScope.launch {
-            userEmail = (sessionManager.getUserEmail().firstOrNull()?:"").toString()
-            password = (sessionManager.getUserPassword().firstOrNull()?:"").toString()
-            isUserSigned = (sessionManager.getSignupStatus().firstOrNull()?:false)
-            Log.d(Tag, "null() called...$isUserSigned")
-            val loginCredentials = LoginCredentials(userEmail,password)
-            _uiState.update {
-                it.copy(
-                    loginCredentials = loginCredentials
-                )
-            }
-            Log.d(Tag, "sessionManager...$userEmail,$userPassword")
-        }
+
     }
     private fun onUiAction(action: LoginUiAction){
         when(action){
             is LoginUiAction.Login->{
-                validateCredentials()
+                getSignupCredentials()
+                //validateCredentials()
             }
             is LoginUiAction.Password->{
                 password = action.password
@@ -89,7 +80,6 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
     }
     private fun validateCredentials(){
         viewModelScope.launch {
-            if (isUserSigned) {
                 val userCredentials = uiState.value.loginCredentials
                 if (email == userCredentials?.email && password == userCredentials.password) {
                     _uiState.update {
@@ -97,7 +87,7 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
                             isValid = true
                         )
                     }
-                } else {
+                } else if (email!=userCredentials?.email || password!=userCredentials.password) {
                     _uiState.update {
                         it.copy(
                             isValid = false,
@@ -106,15 +96,6 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
                         )
                     }
                 }
-            }else{
-                _uiState.update {
-                    it.copy(
-                        isValid = false,
-                        exception = TextFieldException(),
-                        uiText = UiText.DynamicString("Please Signup To Login")
-                    )
-                }
-            }
         }
     }
     private fun resetNavOptions(){
@@ -124,6 +105,26 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
                     navToPasswordScreen = false
                 )
             }
+        }
+    }
+    private fun getSignupCredentials(){
+        viewModelScope.launch(Dispatchers.IO) {
+            userEmail = sessionManager.getUserEmail().map{
+                it?.joinToString()
+            }.firstOrNull()?:""
+            userPassword = sessionManager.getUserPassword().map {
+                it?.joinToString()
+            }.firstOrNull()?:""
+            isUserSigned = (sessionManager.getSignupStatus().firstOrNull()?:false)
+            val loginCredentials = LoginCredentials(userEmail,userPassword)
+            Log.d(Tag, "null() called...$isUserSigned")
+            _uiState.update {
+                it.copy(
+                    loginCredentials = loginCredentials
+                )
+            }
+            if (isUserSigned)validateCredentials()
+            Log.d(Tag, "sessionManager...$userEmail,$userPassword")
         }
     }
 }

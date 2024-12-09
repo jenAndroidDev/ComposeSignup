@@ -53,13 +53,13 @@ class SessionManager(private val context:Context) {
     suspend fun setUserLoginStatus(loginStatus:Boolean) = context.dataStore.edit {
         it[LOGIN] = loginStatus
     }
-    suspend fun getUserLoginStatus() =context.dataStore.data.map {
+    fun getUserLoginStatus() =context.dataStore.data.map {
         it[LOGIN]
     }
     suspend fun setSignUpStatus(signupStatus:Boolean) = context.dataStore.edit {
         it[SIGNUP] = signupStatus
     }
-    suspend fun getSignupStatus() = context.dataStore.data.map {
+    fun getSignupStatus() = context.dataStore.data.map {
         it[SIGNUP]
     }
 }

@@ -140,6 +140,8 @@ class SignUpViewModel @Inject constructor(
                     setUserPassword(password)
                     setSignUpStatus(true)
                 }
+                Log.d(Tag, "validateUserInput() called" +
+                        "...${sessionManager.getSignupStatus().firstOrNull()}")
 //                sessionManager.apply {
 //                    setUserName(userName)
 //                    setUserEmail(email)
