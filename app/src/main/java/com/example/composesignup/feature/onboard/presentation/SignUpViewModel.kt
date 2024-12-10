@@ -39,15 +39,15 @@ class SignUpViewModel @Inject constructor(
     var confirmPassword by mutableStateOf("")
         private set
 
-    private var hasUserSignedIn:Boolean = false
+    private var hasUserSignedIn:Int = 0
 
     val action:(SignUpUiAction)->Unit
     init {
         action = {
             onUiAction(it)
         }
-        viewModelScope.launch {
-            hasUserSignedIn = sessionManager.getSignupStatus().firstOrNull()?:false
+        viewModelScope.launch(Dispatchers.IO) {
+            hasUserSignedIn = 0
         }
 
 
@@ -55,7 +55,7 @@ class SignUpViewModel @Inject constructor(
     private fun onUiAction(action: SignUpUiAction){
         when(action){
             is SignUpUiAction.SignUp->{
-                if (!hasUserSignedIn) validateUserInput() else _uiState.update {
+                if (hasUserSignedIn==1) validateUserInput() else _uiState.update {
                     it.copy(
                         exception = TextFieldException(),
                         uiText = UiText.DynamicString("You Have Already Signed In Please Log in to Continue")
@@ -138,7 +138,7 @@ class SignUpViewModel @Inject constructor(
                     setUserEmail(email)
                     setUserName(userName)
                     setUserPassword(password)
-                    setSignUpStatus(true)
+                    setSignUpStatus(1)
                 }
                 Log.d(Tag, "validateUserInput() called" +
                         "...${sessionManager.getSignupStatus().firstOrNull()}")

@@ -1,6 +1,7 @@
 package com.example.composesignup.feature.onboard.presentation
 
 import android.util.Log
+import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -84,7 +86,9 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
                 if (email == userCredentials?.email && password == userCredentials.password) {
                     _uiState.update {
                         it.copy(
-                            isValid = true
+                            isValid = true,
+                            exception = TextFieldException(),
+                            uiText = UiText.DynamicString("Successfull Login")
                         )
                     }
                 } else if (email!=userCredentials?.email || password!=userCredentials.password) {
@@ -115,15 +119,19 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
             userPassword = sessionManager.getUserPassword().map {
                 it?.joinToString()
             }.firstOrNull()?:""
-            isUserSigned = (sessionManager.getSignupStatus().firstOrNull()?:false)
+            var isUserSignedIn = -1
+            sessionManager.getSignupStatus().map {
+                it?.let { isUserSignedIn = it }
+            }
             val loginCredentials = LoginCredentials(userEmail,userPassword)
             Log.d(Tag, "null() called...$isUserSigned")
+            Log.d(Tag, "getSignupCredentials() called...$isUserSignedIn")
             _uiState.update {
                 it.copy(
                     loginCredentials = loginCredentials
                 )
             }
-            if (isUserSigned)validateCredentials()
+            if (isUserSignedIn==1)validateCredentials()
             Log.d(Tag, "sessionManager...$userEmail,$userPassword")
         }
     }

@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.map
@@ -15,7 +16,7 @@ class SessionManager(private val context:Context) {
     companion object{
         val welcomeScreenShown = booleanPreferencesKey("welcome_screen")
         val LOGIN = booleanPreferencesKey("login")
-        val SIGNUP = booleanPreferencesKey("signup")
+        val SIGNUP = intPreferencesKey("signup")
         val EMAIL = stringSetPreferencesKey("email")
         val PASSWORD  = stringSetPreferencesKey("password")
         val NAME = stringSetPreferencesKey("username")
@@ -56,7 +57,7 @@ class SessionManager(private val context:Context) {
     fun getUserLoginStatus() =context.dataStore.data.map {
         it[LOGIN]
     }
-    suspend fun setSignUpStatus(signupStatus:Boolean) = context.dataStore.edit {
+    suspend fun setSignUpStatus(signupStatus:Int) = context.dataStore.edit {
         it[SIGNUP] = signupStatus
     }
     fun getSignupStatus() = context.dataStore.data.map {
