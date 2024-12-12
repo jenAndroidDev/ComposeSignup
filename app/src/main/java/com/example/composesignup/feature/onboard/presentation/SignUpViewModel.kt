@@ -133,7 +133,7 @@ class SignUpViewModel @Inject constructor(
         val isTermsAccepted = uiState.value.isTermsAccepted
         if (userName.isNotEmpty() && isPasswordConfirmed && email.isNotEmpty()
             && isTermsAccepted){
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
                 with(sessionManager){
                     setUserEmail(email)
                     setUserName(userName)

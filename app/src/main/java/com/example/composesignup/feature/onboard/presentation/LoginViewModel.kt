@@ -14,7 +14,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -119,8 +118,8 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
             userPassword = sessionManager.getUserPassword().map {
                 it?.joinToString()
             }.firstOrNull()?:""
-            var isUserSignedIn = -1
-            sessionManager.getSignupStatus().map {
+            var isUserSignedIn = 0
+            sessionManager.getSignupStatus().onEach {
                 it?.let { isUserSignedIn = it }
             }
             val loginCredentials = LoginCredentials(userEmail,userPassword)
