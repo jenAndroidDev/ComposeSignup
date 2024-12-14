@@ -8,11 +8,14 @@ import com.example.composesignup.feature.onboard.presentation.OnboardScreen
 @Composable
 fun OnboardRoute(
     modifier: Modifier = Modifier,
-    onClick:()->Unit
+    onClick:()->Unit,
+    onLoginSuccess:()->Unit
 ){
     Column {
         OnboardScreen(modifier = modifier,
-            onForgotPasswordClick = onClick)
+            onForgotPasswordClick = onClick,
+            onLoginSuccess = onLoginSuccess
+            )
     }
 
 }

@@ -1,7 +1,6 @@
 package com.example.composesignup.feature.onboard.presentation
 
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -42,7 +41,8 @@ private const val Tag = "OnboardScreen"
 @Composable
 fun OnboardScreen(
     modifier: Modifier,
-    onForgotPasswordClick: () -> Unit
+    onForgotPasswordClick: () -> Unit,
+    onLoginSuccess: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -55,14 +55,17 @@ fun OnboardScreen(
             title = stringResource(R.string.welcome_text),
             description = stringResource(R.string.onboard_description)
         )
-        OnboardTabContainer(modifier = Modifier, onForgotPasswordClick = onForgotPasswordClick)
+        OnboardTabContainer(modifier = Modifier,
+            onForgotPasswordClick = onForgotPasswordClick,
+            onLoginSuccess = onLoginSuccess)
     }
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun OnboardTabContainer(
     modifier: Modifier,
-    onForgotPasswordClick: () -> Unit
+    onForgotPasswordClick: () -> Unit,
+    onLoginSuccess: () -> Unit
 ) {
     val tabItems = listOf(
         OnboardTabItem(
@@ -119,10 +122,11 @@ private fun OnboardTabContainer(
         ) { index ->
             when (index) {
                 0 -> {
-                    LoginScreen(modifier = modifier) {
-                        Log.d(Tag, "OnboardTabContainer() called")
-                        onForgotPasswordClick.invoke()
-                    }
+                    LoginScreen(
+                        modifier = modifier,
+                        onForgotPasswordClick = onForgotPasswordClick,
+                        onLoginSuccess = onLoginSuccess
+                    )
                 }
 
                 1 -> {
@@ -136,6 +140,6 @@ private val RoundedCornerRadius = 12.dp
 @Preview
 @Composable
 private fun PreviewOnboardScreen(){
-    OnboardScreen(modifier = Modifier, onForgotPasswordClick = {})
+    OnboardScreen(modifier = Modifier, onForgotPasswordClick = {}, onLoginSuccess = {})
 }
 

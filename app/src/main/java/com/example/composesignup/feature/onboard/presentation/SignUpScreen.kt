@@ -15,6 +15,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -58,6 +59,7 @@ fun SignUpScreen(
     action: (SignUpUiAction) -> Unit = viewModel.action,
     uiState: StateFlow<SignUpUiState> = viewModel.uiState
 ) {
+
     val scrollState = rememberScrollState()
     Column(
         modifier = modifier
@@ -89,7 +91,6 @@ fun SignUpScreen(
             action.invoke(SignUpUiAction.SignUp)
         }
         Spacer(modifier = modifier.height(12.dp))
-
         UiError(
             uiState = uiState,
             action = action
