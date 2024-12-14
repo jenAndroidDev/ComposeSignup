@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -56,9 +58,11 @@ fun SignUpScreen(
     action: (SignUpUiAction) -> Unit = viewModel.action,
     uiState: StateFlow<SignUpUiState> = viewModel.uiState
 ) {
+    val scrollState = rememberScrollState()
     Column(
         modifier = modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .background(color = GreyWhite)
             .padding(12.dp)
     ) {
@@ -85,6 +89,7 @@ fun SignUpScreen(
             action.invoke(SignUpUiAction.SignUp)
         }
         Spacer(modifier = modifier.height(12.dp))
+
         UiError(
             uiState = uiState,
             action = action
