@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -96,7 +97,8 @@ private fun LoginTextFields(
             placeHolder = stringResource(R.string.password_hint),
             leadingIcon = {
                 Icon(imageVector = ComposeSignUpIcons.PasswordLock, contentDescription = "Password")
-            }
+            },
+            visualTransformation = PasswordVisualTransformation()
         ) {
             uiAction.invoke(LoginUiAction.Password(it))
         }

@@ -42,6 +42,7 @@ hilt-ext-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hil
 hilt-navigation = {group="androidx.hilt",name="hilt-navigation-compose",version.ref = "hiltnavigation"}
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-splash-screen={group="androidx.core",name="core-splashscreen",version.ref="splashScreenApi"}
+timber = {group="com.jakewharton.timber",name="timber",version.ref="timber"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
