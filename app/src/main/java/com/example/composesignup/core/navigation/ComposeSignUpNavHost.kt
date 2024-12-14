@@ -33,7 +33,11 @@ fun ComposeSignUpNavHost(
         forYouScreen(appState::navigateToDetailScreen)
         searchScreen()
         detailScreen()
-        onboardScreen(appState::navigateToForgotPasswordScreen)
+        onboardScreen({
+            appState.navigateToForgotPasswordScreen()
+        },{
+            appState.navigateToTopLevelDestination(TopLevelDestinations.FOR_YOU)
+        })
         forgotPasswordScreen({
             appState.navigateToOtpVerificationScreen()
         },{

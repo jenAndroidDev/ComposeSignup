@@ -41,10 +41,13 @@ private const val Tag = "LoginScreen"
 fun LoginScreen(
     modifier: Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
-    uiState:StateFlow<LoginUiState> = viewModel.uiState,
-    uiAction: (LoginUiAction)->Unit = viewModel.action,
-    onForgotPasswordClick:()->Unit = {}
+    uiState: StateFlow<LoginUiState> = viewModel.uiState,
+    uiAction: (LoginUiAction) -> Unit = viewModel.action,
+    onForgotPasswordClick: () -> Unit = {},
+    onLoginSuccess: () -> Unit
 ) {
+    val isInputValid = uiState.collectAsStateWithLifecycle().value.isValid
+    if(isInputValid)onLoginSuccess.invoke()
     Column(modifier  = modifier
         .fillMaxSize()
         .background(color = GreyWhite)
@@ -123,7 +126,7 @@ private fun UiError(
     uiState: StateFlow<LoginUiState>,
     action: (LoginUiAction)->Unit
 ){
-    val isInputValid = uiState.collectAsStateWithLifecycle().value.isValid
+
     val hasExceptions = uiState.collectAsStateWithLifecycle().value.exception
     if (hasExceptions!=null){
         when(hasExceptions){
@@ -143,5 +146,5 @@ private fun UiError(
 @Preview
 @Composable
 private fun LoginScreenPreview(){
-    LoginScreen(modifier = Modifier)
+    LoginScreen(modifier = Modifier, onLoginSuccess = {})
 }
