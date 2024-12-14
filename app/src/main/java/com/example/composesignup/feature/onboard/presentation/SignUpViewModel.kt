@@ -13,9 +13,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val Tag = "SignUpViewModel"
@@ -46,8 +48,13 @@ class SignUpViewModel @Inject constructor(
         action = {
             onUiAction(it)
         }
+        /**
+         * If the Value is 0 user is newuser else old user */
         viewModelScope.launch(Dispatchers.IO) {
-            hasUserSignedIn = 0
+            sessionManager.getSignupStatus().collectLatest {
+                hasUserSignedIn = it
+            }
+            Timber.tag(Tag).d("hasUserSignedIn...$hasUserSignedIn")
         }
 
 
@@ -55,7 +62,7 @@ class SignUpViewModel @Inject constructor(
     private fun onUiAction(action: SignUpUiAction){
         when(action){
             is SignUpUiAction.SignUp->{
-                if (hasUserSignedIn==1) validateUserInput() else _uiState.update {
+                if (hasUserSignedIn==0) validateUserInput() else _uiState.update {
                     it.copy(
                         exception = TextFieldException(),
                         uiText = UiText.DynamicString("You Have Already Signed In Please Log in to Continue")
@@ -64,11 +71,11 @@ class SignUpViewModel @Inject constructor(
             }
             is SignUpUiAction.Email->{
                 email = action.email
-                Log.d(Tag, "onUiAction() called with: email = ${action.email}")
+                Timber.tag(Tag).d("onUiAction() called with: email = %s", action.email)
             }
             is SignUpUiAction.UserName->{
                 userName = action.name
-                Log.d(Tag, "onUiAction() called with: name = ${action.name}")
+                Timber.tag(Tag).d("onUiAction() called with: name = " + action.name)
             }
             is SignUpUiAction.Password->{
                 password=action.password
@@ -85,12 +92,12 @@ class SignUpViewModel @Inject constructor(
                             )
                         }
                     }
-                Log.d(Tag, "onUiAction() called with: password = ${action.password}")
+                Timber.tag(Tag).d("onUiAction() called with: password = " + action.password)
             }
             is SignUpUiAction.ConfirmPassword->{
                 confirmPassword = action.password
                 confirmPassword()
-                Log.d(Tag, "onUiAction() called with: confirmPassword = ${action.password}")
+                Timber.tag(Tag).d("onUiAction() called with: confirmPassword = " + action.password)
             }
             is SignUpUiAction.ToggleTermsAndCondition->{
                 val isTermsAccepted = uiState.value.isTermsAccepted
@@ -140,8 +147,10 @@ class SignUpViewModel @Inject constructor(
                     setUserPassword(password)
                     setSignUpStatus(1)
                 }
-                Log.d(Tag, "validateUserInput() called" +
-                        "...${sessionManager.getSignupStatus().firstOrNull()}")
+                Timber.tag(Tag).d(
+                    "validateUserInput() called" + "..." + sessionManager.getSignupStatus()
+                        .firstOrNull()
+                )
 //                sessionManager.apply {
 //                    setUserName(userName)
 //                    setUserEmail(email)
@@ -159,6 +168,7 @@ class SignUpViewModel @Inject constructor(
             }
         }else if (userName.isNotEmpty() && isPasswordConfirmed && email.isNotEmpty()
             && !isTermsAccepted ){
+            Timber.tag(Tag).d("scenario!")
             _uiState.update {
                 it.copy(
                     isInputValid = false,
@@ -168,6 +178,7 @@ class SignUpViewModel @Inject constructor(
                 )
             }
         } else{
+            Timber.tag(Tag).d("scenario2")
             _uiState.update {
                 it.copy(
                     isInputValid = false,

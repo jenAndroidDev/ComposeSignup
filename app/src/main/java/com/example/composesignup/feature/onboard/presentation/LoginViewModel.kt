@@ -1,10 +1,10 @@
 package com.example.composesignup.feature.onboard.presentation
 
 import android.util.Log
-import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.os.trace
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composesignup.core.sessionManager.SessionManager
@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -45,7 +44,12 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
         action ={
             onUiAction(it)
         }
+        onTestCredentials()
+    }
+    private fun onTestCredentials(){
+        viewModelScope.launch(Dispatchers.IO) {
 
+        }
     }
     private fun onUiAction(action: LoginUiAction){
         when(action){
@@ -90,6 +94,9 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
                             uiText = UiText.DynamicString("Successfull Login")
                         )
                     }
+                    sessionManager.run {
+                        setUserLoginStatus(true)
+                    }
                 } else if (email!=userCredentials?.email || password!=userCredentials.password) {
                     _uiState.update {
                         it.copy(
@@ -118,10 +125,7 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
             userPassword = sessionManager.getUserPassword().map {
                 it?.joinToString()
             }.firstOrNull()?:""
-            var isUserSignedIn = 0
-            sessionManager.getSignupStatus().onEach {
-                it?.let { isUserSignedIn = it }
-            }
+            val isUserSignedIn = sessionManager.getSignupStatus().firstOrNull()?:0
             val loginCredentials = LoginCredentials(userEmail,userPassword)
             Log.d(Tag, "null() called...$isUserSigned")
             Log.d(Tag, "getSignupCredentials() called...$isUserSignedIn")

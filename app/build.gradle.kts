@@ -9,16 +9,20 @@ android {
     namespace = "com.example.composesignup"
     compileSdk = 34
 
+
     defaultConfig {
         applicationId = "com.example.composesignup"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.1.3"//X:Y:Z;X=Major,Y=Minor,Z=Patch
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        buildFeatures {
+            buildConfig = true
         }
     }
 
@@ -30,7 +34,13 @@ android {
                 "proguard-rules.pro"
             )
         }
+        getByName("debug"){
+            isDebuggable = true
+            applicationIdSuffix = ".debug"
+
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -75,6 +85,8 @@ dependencies {
     implementation(libs.androidx.datastore)
     //splashscreen
     implementation(libs.androidx.splash.screen)
+    //Timber
+    implementation(libs.timber)
 
 
 

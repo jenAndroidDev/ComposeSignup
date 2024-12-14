@@ -61,6 +61,6 @@ class SessionManager(private val context:Context) {
         it[SIGNUP] = signupStatus
     }
     fun getSignupStatus() = context.dataStore.data.map {
-        it[SIGNUP]
+        it[SIGNUP]?:0
     }
 }
