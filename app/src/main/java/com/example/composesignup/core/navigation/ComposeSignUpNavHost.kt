@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import com.example.composesignup.feature.detail.navigation.detailScreen
 import com.example.composesignup.feature.foryou.navigation.forYouScreen
 import com.example.composesignup.feature.onboard.navigation.forgotPasswordScreen
+import com.example.composesignup.feature.onboard.navigation.navigateToOnboard
 import com.example.composesignup.feature.onboard.navigation.onboardScreen
 import com.example.composesignup.feature.otpverification.navigation.otpVerificationScreen
 import com.example.composesignup.feature.search.navigation.searchScreen
@@ -28,7 +29,7 @@ fun ComposeSignUpNavHost(
         startDestination = startDestination,
         modifier = modifier){
         welcomeScreen{
-            appState.navigateToTopLevelDestination(TopLevelDestinations.FOR_YOU)
+            appState.navController.navigateToOnboard()
         }
         forYouScreen(appState::navigateToDetailScreen)
         searchScreen()

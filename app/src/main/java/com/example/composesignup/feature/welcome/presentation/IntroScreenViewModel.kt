@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
@@ -34,17 +35,12 @@ class IntroScreenViewModel @Inject constructor(
     }
     private fun onUiAction(action: IntroScreenUiAction){
         when(action){
-            is IntroScreenUiAction.SetWelcomeScreenStatus->{
-                viewModelScope.launch(Dispatchers.IO) {
-                    sessionManager.saveWelcomeScreenStatus(true)
-                }
-                Log.d(Tag, "onUiAction() called with: action = $action")
-            }
+            is IntroScreenUiAction.SetWelcomeScreenStatus,
             is IntroScreenUiAction.IntroScreenSkipped->{
                 viewModelScope.launch(Dispatchers.IO) {
                     sessionManager.saveWelcomeScreenStatus(true)
                 }
-                Log.d(Tag, "onUiAction() called with: action = $action")
+                Timber.tag(Tag).d("onUiAction() called with: action = " + action)
             }
             is IntroScreenUiAction.RefreshInternal->{
                 _uiState.update {
@@ -62,13 +58,13 @@ class IntroScreenViewModel @Inject constructor(
                         )
                     }
                 }
-                Log.d(Tag, "onUiAction() called with: action = $action")
+                Timber.tag(Tag).d("onUiAction() called with: action = " + action)
             }
         }
     }
     private fun getIntroItems(){
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d(Tag, "getIntroItems() called")
+            Timber.tag(Tag).d("getIntroItems() called")
             val tempList = uiState.value.data.toMutableList()
             val items = arrayListOf(
                 IntroItem(UUID.randomUUID().toString(),

@@ -25,7 +25,7 @@ class SessionManager(private val context:Context) {
         it[welcomeScreenShown] = isShown
     }
     suspend fun isWelcomeScreenShown() = context.dataStore.data.map {
-        it[welcomeScreenShown]
+        it[welcomeScreenShown]?:false
     }
     suspend fun setUserName(name:String){
         context.dataStore.edit {

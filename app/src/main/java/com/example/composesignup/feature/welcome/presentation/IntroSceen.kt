@@ -46,6 +46,7 @@ import com.example.composesignup.ui.theme.GREY20
 import com.example.composesignup.ui.theme.Green40
 import com.example.composesignup.ui.theme.Green80
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import java.util.UUID
 
 /*
@@ -64,10 +65,8 @@ fun IntroScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     val isSlidingComplete = uiState.value.isWelcomeSlideCompleted
     if (isSlidingComplete){
-        Log.d(
-            Tag,
-            "IntroScreen() called with: modifier = $modifier, onClick = $onClick, viewModel = $viewModel, uiAction = $uiAction"
-        )
+        Timber.tag(Tag)
+            .d("IntroScreen() called with: modifier = " + modifier + ", onClick = " + onClick + ", viewModel = " + viewModel + ", uiAction = " + uiAction)
         onClick.invoke()
         uiAction.invoke(IntroScreenUiAction.RefreshInternal)
     }
@@ -136,12 +135,13 @@ fun IntroSlider(
             IntroItem(model = introSlideItems[page], modifier = modifier)
         }//:Horizontal Pager
         WormIndicator(count = introSlideItems.size, pagerState = pagerState)
-        Text(text = introSlideItems[pagerState.currentPage].title,
-                color = Green80,
-                style = MaterialTheme.typography.titleLarge,
-                fontFamily = fontFamily,
-                fontWeight = FontWeight.SemiBold,
-            )
+        Text(
+            text = introSlideItems[pagerState.currentPage].title,
+            color = Green80,
+            style = MaterialTheme.typography.titleLarge,
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.SemiBold,
+        )
         Spacer(modifier = modifier.height(12.dp))
         Text(
             text = introSlideItems[pagerState.currentPage].description,
