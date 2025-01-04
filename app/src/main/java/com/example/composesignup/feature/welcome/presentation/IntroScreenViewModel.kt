@@ -1,6 +1,5 @@
 package com.example.composesignup.feature.welcome.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composesignup.R
@@ -37,8 +36,8 @@ class IntroScreenViewModel @Inject constructor(
         when(action){
             is IntroScreenUiAction.SetWelcomeScreenStatus,
             is IntroScreenUiAction.IntroScreenSkipped->{
-                viewModelScope.launch(Dispatchers.IO) {
-                    sessionManager.saveWelcomeScreenStatus(true)
+                viewModelScope.launch() {
+                    sessionManager.setWelcomeScreenStatus(true)
                 }
                 Timber.tag(Tag).d("onUiAction() called with: action = " + action)
             }
@@ -51,7 +50,6 @@ class IntroScreenViewModel @Inject constructor(
             }
             is IntroScreenUiAction.IntroScreenSlideCompleted->{
                 viewModelScope.launch(Dispatchers.IO) {
-                    sessionManager.saveWelcomeScreenStatus(true)
                     _uiState.update {
                         it.copy(
                             isWelcomeSlideCompleted = true

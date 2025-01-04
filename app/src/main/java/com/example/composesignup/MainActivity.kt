@@ -10,13 +10,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.composesignup.core.navigation.rememberComposeSignUpState
@@ -27,13 +24,11 @@ import com.example.composesignup.feature.welcome.navigation.WELCOME_ROUTE
 import com.example.composesignup.ui.theme.ComposeSignupTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.sign
 
 private const val Tag = "MainActivity"
 @AndroidEntryPoint
@@ -41,7 +36,6 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var sessionManager: SessionManager
-
     private val viewModel by viewModels<MainActivityViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,20 +49,24 @@ class MainActivity : ComponentActivity() {
                 Color.TRANSPARENT,Color.TRANSPARENT
             )
         )
+
         setContent {
             ComposeSignupTheme {
-                viewModel.isWelcomeScreenShown()
-                val isUserLoggedIn = viewModel.uiState.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.STARTED).value.isUserLoggedIn
-                val isWelcomeScreenShown = viewModel.uiState.collectAsStateWithLifecycle(
-                    minActiveState = Lifecycle.State.STARTED
-                ).value.isWelcomeScreenShown
-                Timber.tag(Tag).d("$isWelcomeScreenShown,$isUserLoggedIn")
-                var startDestination = ""
-                runBlocking {
-                     startDestination = if (!isWelcomeScreenShown && !isUserLoggedIn){
-                        WELCOME_ROUTE
-                    }else if (!isUserLoggedIn){
+                /*
+                *
+                * This way of collecting flows disrupts the login flow*/
+                val isNewUser = runBlocking {
+                    sessionManager.getUserLoginStatus().firstOrNull()?:false
+                }
+                val signUpStep = runBlocking {
+                    sessionManager.getSignupStatus().firstOrNull()?:-1
+                }
+                Timber.tag(Tag).d("$isNewUser,$signUpStep")
+                val startDestination = runBlocking {
+                    if (isNewUser && signUpStep==0) {
                         ONBOARD_ROUTE
+                    }else if(!isNewUser && signUpStep==0){
+                        WELCOME_ROUTE
                     }else{
                         FOR_YOU_ROUTE
                     }
