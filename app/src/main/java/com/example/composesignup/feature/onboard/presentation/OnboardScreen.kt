@@ -28,10 +28,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.composesignup.R
 import com.example.composesignup.core.designsystem.components.ComposeSignupOnBoardHeader
 import com.example.composesignup.ui.theme.GREY20
 import com.example.composesignup.ui.theme.Green80
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 /*
@@ -42,8 +45,12 @@ private const val Tag = "OnboardScreen"
 fun OnboardScreen(
     modifier: Modifier,
     onForgotPasswordClick: () -> Unit,
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    viewModel:OnboardScreenViewModel = hiltViewModel(),
+    uiState:StateFlow<OnboardUiState> = viewModel.uiState
+
 ) {
+    val state = uiState.collectAsStateWithLifecycle().value.isOnboardShown
     Column(
         modifier = modifier
             .fillMaxSize()

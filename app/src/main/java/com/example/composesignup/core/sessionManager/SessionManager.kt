@@ -21,11 +21,11 @@ class SessionManager(private val context:Context) {
         val PASSWORD  = stringSetPreferencesKey("password")
         val NAME = stringSetPreferencesKey("username")
     }
-    suspend fun saveWelcomeScreenStatus(isShown:Boolean) = context.dataStore.edit {
+    suspend fun setWelcomeScreenStatus(isShown:Boolean) = context.dataStore.edit {
         it[welcomeScreenShown] = isShown
     }
-    suspend fun isWelcomeScreenShown() = context.dataStore.data.map {
-        it[welcomeScreenShown]
+     fun isWelcomeScreenShown() = context.dataStore.data.map {
+        it[welcomeScreenShown]?:false
     }
     suspend fun setUserName(name:String){
         context.dataStore.edit {

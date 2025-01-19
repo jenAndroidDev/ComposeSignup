@@ -1,7 +1,9 @@
 package com.example.composesignup.core.di
 
 import android.content.Context
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.composesignup.core.sessionManager.SessionManager
+import com.example.composesignup.utlis.PersistentHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,4 +20,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideSessionManager(@ApplicationContext context:Context) = SessionManager(context)
+
+    @Provides
+    @Singleton
+    fun providePersistentStore(@ApplicationContext context: Context) = PersistentHelper.getInstance(application = context)
 }

@@ -14,18 +14,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.composesignup.core.navigation.rememberComposeSignUpState
 import com.example.composesignup.core.sessionManager.SessionManager
+import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.example.composesignup.feature.onboard.navigation.ONBOARD_ROUTE
+import com.example.composesignup.feature.welcome.navigation.WELCOME_ROUTE
 import com.example.composesignup.ui.theme.ComposeSignupTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.sign
 
 private const val Tag = "MainActivity"
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    /*
+    * Reverting From DataStore To SharedPref*/
 
     @Inject
     lateinit var sessionManager: SessionManager
@@ -42,25 +51,46 @@ class MainActivity : ComponentActivity() {
                 Color.TRANSPARENT,Color.TRANSPARENT
             )
         )
+
         setContent {
             ComposeSignupTheme {
-                val isWelcomeScreenShown = runBlocking {
-                    sessionManager.isWelcomeScreenShown().firstOrNull()?:false
+                /*
+                *
+                * This way of collecting flows disrupts the login flow*/
+                val isNewUser = runBlocking {
+                    sessionManager.getUserLoginStatus().firstOrNull()?:false
                 }
-//               val startDestination = if (!isWelcomeScreenShown){
-//                   WELCOME_ROUTE
-//                }else FOR_YOU_ROUTE
-
-                val startDestination = ONBOARD_ROUTE
-
+                val signUpStep = runBlocking {
+                    sessionManager.getSignupStatus().firstOrNull()?:-1
+                }
+                Timber.tag(Tag).d("$isNewUser,$signUpStep")
+                val startDestination = runBlocking {
+                    if (isNewUser && signUpStep==0) {
+                        ONBOARD_ROUTE
+                    }else if(!isNewUser && signUpStep==0){
+                        WELCOME_ROUTE
+                    }else{
+                        FOR_YOU_ROUTE
+                    }
+                }
                 val appState = rememberComposeSignUpState()
                 ComposeSignUpApp(appState = appState, startDestination = startDestination)
-                //SignUpScreen()
-                //LoginScreen(modifier = Modifier)
-                //OnboardScreen(modifier = Modifier)
             }
         }
     }
+}
+@Composable
+private fun MainScreen(
+    uiState: StateFlow<MainActivityUiState>,
+
+){
+
+
+
+
+
+
+
 }
 
 @Composable

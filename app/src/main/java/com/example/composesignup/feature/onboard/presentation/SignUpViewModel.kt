@@ -51,6 +51,7 @@ class SignUpViewModel @Inject constructor(
         /**
          * If the Value is 0 user is newuser else old user */
         viewModelScope.launch(Dispatchers.IO) {
+            sessionManager.setSignUpStatus(1)
             sessionManager.getSignupStatus().collectLatest {
                 hasUserSignedIn = it
             }
