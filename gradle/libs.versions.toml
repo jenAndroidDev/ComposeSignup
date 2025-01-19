@@ -1,5 +1,6 @@
 [versions]
 agp = "8.4.1"
+androidxCrypto = "1.1.0-alpha06"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -44,6 +45,7 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-splash-screen={group="androidx.core",name="core-splashscreen",version.ref="splashScreenApi"}
 timber = {group="com.jakewharton.timber",name="timber",version.ref="timber"}
 funktionale = { module = "com.github.MarioAriasC:funKTionale", version.ref = "funktionale" }
+androidx-security-crypto-ktx = { module = "androidx.security:security-crypto-ktx", version.ref = "androidxCrypto" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

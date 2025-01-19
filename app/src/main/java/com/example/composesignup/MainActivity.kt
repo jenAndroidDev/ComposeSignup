@@ -33,6 +33,8 @@ import kotlin.math.sign
 private const val Tag = "MainActivity"
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    /*
+    * Reverting From DataStore To SharedPref*/
 
     @Inject
     lateinit var sessionManager: SessionManager
