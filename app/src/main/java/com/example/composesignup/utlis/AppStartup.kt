@@ -4,13 +4,13 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.MainThread
-import timber.log.Timber.Forest.tag
+import com.example.composesignup.core.utils.concurrent.AppExecutors
 import java.util.LinkedList
 import kotlin.math.max
 
 class AppStartup {
 
-    val Tag = tag(AppStartup::class.java)
+    val Tag = com.example.composesignup.tag(AppStartup::class.java)
 
     private val blocking: MutableList<Task>
     private val nonBlocking: MutableList<Task>
