@@ -6,10 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.composesignup.core.di.AppDependencies
 import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.core.utils.TextFieldException
 import com.example.composesignup.utlis.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hilt_aggregated_deps._dagger_hilt_android_flags_FragmentGetContextFix_FragmentGetContextFixEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -63,12 +65,13 @@ class SignUpViewModel @Inject constructor(
     private fun onUiAction(action: SignUpUiAction){
         when(action){
             is SignUpUiAction.SignUp->{
-                if (hasUserSignedIn==0) validateUserInput() else _uiState.update {
-                    it.copy(
-                        exception = TextFieldException(),
-                        uiText = UiText.DynamicString("You Have Already Signed In Please Log in to Continue")
-                    )
-                }
+                validateUserInput()
+//                if (hasUserSignedIn==0) validateUserInput() else _uiState.update {
+//                    it.copy(
+//                        exception = TextFieldException(),
+//                        uiText = UiText.DynamicString("You Have Already Signed In Please Log in to Continue")
+//                    )
+//                }
             }
             is SignUpUiAction.Email->{
                 email = action.email
@@ -142,24 +145,15 @@ class SignUpViewModel @Inject constructor(
         if (userName.isNotEmpty() && isPasswordConfirmed && email.isNotEmpty()
             && isTermsAccepted){
             viewModelScope.launch {
-                with(sessionManager){
-                    setUserEmail(email)
-                    setUserName(userName)
-                    setUserPassword(password)
-                    setSignUpStatus(1)
-                }
-                Timber.tag(Tag).d(
-                    "validateUserInput() called" + "..." + sessionManager.getSignupStatus()
-                        .firstOrNull()
-                )
-//                sessionManager.apply {
-//                    setUserName(userName)
-//                    setUserEmail(email)
-//                    setUserPassword(password)
-//                }.also {
-//                    it.setSignUpStatus(true)
-//                }
+                    AppDependencies.persistentStore?.run {
+                        setUserName(userName)
+                        setUserEmail(email)
+                        setUserPassword(password)
+                        setSignUpStatus(1)
+                    }
             }
+            val userName = AppDependencies.persistentStore?.name?:""
+            Timber.tag(Tag).d("userName...$userName")
             _uiState.update {
                 it.copy(
                     isInputValid = true,

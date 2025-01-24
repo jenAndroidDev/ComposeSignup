@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
             ComposeSignupTheme {
                 /*
                 *
-                * This way of collecting flows disrupts the login flow*/
+                * This way of collecting flows disrupts the login flow since */
                 val isNewUser = runBlocking {
                     sessionManager.getUserLoginStatus().firstOrNull()?:false
                 }
