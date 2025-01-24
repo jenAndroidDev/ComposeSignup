@@ -43,7 +43,7 @@ class SignUpViewModel @Inject constructor(
     var confirmPassword by mutableStateOf("")
         private set
 
-    private var hasUserSignedIn:Int = 0
+    private var hasUserSignedIn:Boolean = false
 
     val action:(SignUpUiAction)->Unit
     init {
@@ -51,27 +51,23 @@ class SignUpViewModel @Inject constructor(
             onUiAction(it)
         }
         /**
-         * If the Value is 0 user is newuser else old user */
-        viewModelScope.launch(Dispatchers.IO) {
-            sessionManager.setSignUpStatus(1)
-            sessionManager.getSignupStatus().collectLatest {
-                hasUserSignedIn = it
-            }
-            Timber.tag(Tag).d("hasUserSignedIn...$hasUserSignedIn")
-        }
+         * Check whether the user has already signed in or not. */
+
+        Timber.tag(Tag).d("userSignedStatus...$hasUserSignedIn")
 
 
     }
     private fun onUiAction(action: SignUpUiAction){
         when(action){
             is SignUpUiAction.SignUp->{
+                hasUserSignedIn = AppDependencies.persistentStore?.signUpStep==1
                 validateUserInput()
-//                if (hasUserSignedIn==0) validateUserInput() else _uiState.update {
-//                    it.copy(
-//                        exception = TextFieldException(),
-//                        uiText = UiText.DynamicString("You Have Already Signed In Please Log in to Continue")
-//                    )
-//                }
+                if (!hasUserSignedIn) validateUserInput() else _uiState.update {
+                    it.copy(
+                        exception = TextFieldException(),
+                        uiText = UiText.DynamicString("You Have Already Signed In Please Log in to Continue")
+                    )
+                }
             }
             is SignUpUiAction.Email->{
                 email = action.email
