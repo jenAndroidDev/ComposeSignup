@@ -61,7 +61,6 @@ class SignUpViewModel @Inject constructor(
         when(action){
             is SignUpUiAction.SignUp->{
                 hasUserSignedIn = AppDependencies.persistentStore?.signUpStep==1
-                validateUserInput()
                 if (!hasUserSignedIn) validateUserInput() else _uiState.update {
                     it.copy(
                         exception = TextFieldException(),
@@ -141,6 +140,10 @@ class SignUpViewModel @Inject constructor(
         if (userName.isNotEmpty() && isPasswordConfirmed && email.isNotEmpty()
             && isTermsAccepted){
             viewModelScope.launch {
+                val name  = userName
+                val email  = email
+                val password = password
+                Timber.tag(Tag).d("validate...$name,$email,$password")
                     AppDependencies.persistentStore?.run {
                         setUserName(userName)
                         setUserEmail(email)
@@ -149,7 +152,9 @@ class SignUpViewModel @Inject constructor(
                     }
             }
             val userName = AppDependencies.persistentStore?.name?:""
-            Timber.tag(Tag).d("userName...$userName")
+            val userEmail = AppDependencies.persistentStore?.email?:""
+            val userPassword = AppDependencies.persistentStore?.password?:""
+            Timber.tag(Tag).d("userName...$userName,$userEmail,$userPassword")
             _uiState.update {
                 it.copy(
                     isInputValid = true,
