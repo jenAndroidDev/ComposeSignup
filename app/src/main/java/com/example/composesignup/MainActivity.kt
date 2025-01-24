@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
             ComposeSignupTheme {
                 /*
                 *
-                * This way of collecting flows disrupts the login flow*/
+                * This way of collecting flows disrupts the login flow since */
                 val isNewUser = runBlocking {
                     sessionManager.getUserLoginStatus().firstOrNull()?:false
                 }
@@ -68,9 +68,9 @@ class MainActivity : ComponentActivity() {
                     if (isNewUser && signUpStep==0) {
                         ONBOARD_ROUTE
                     }else if(!isNewUser && signUpStep==0){
-                        WELCOME_ROUTE
+                        ONBOARD_ROUTE
                     }else{
-                        FOR_YOU_ROUTE
+                        ONBOARD_ROUTE
                     }
                 }
                 val appState = rememberComposeSignUpState()

@@ -11,21 +11,48 @@ class PersistentHelper(
 ) :PersistentStore {
 
     override val isUserLoggedIn: Boolean
-        get() = TODO("Not yet implemented")
+        get() = getAppPreferences().getBoolean(UserPreferencesKey.IS_LOGGED_IN,false)
 
     override val signUpStep: Int
-        get() = TODO("Not yet implemented")
+        get() = getAppPreferences().getInt(AppEssentialKeys.SIGN_UP_STEP,0)?:-1
+
+    override val email: String
+        get() = getAppPreferences().getString(UserPreferencesKey.USER_EMAIL,"")?:""
+
+    override val name: String
+        get() = getAppPreferences().getString(UserPreferencesKey.USER_NAME,"")?:""
+
+    override val password: String
+        get() = getAppPreferences().getString(UserPreferencesKey.PASSWORD,"")?:""
+
+    override fun setUserName(name: String) {
+        getAppPreferences().edit().putString(UserPreferencesKey.USER_NAME,name).apply()
+    }
+
+    override fun setUserEmail(email: String) {
+        getAppPreferences().edit().putString(UserPreferencesKey.USER_EMAIL,email).apply()
+    }
+
+    override fun setUserPassword(password: String) {
+        getAppPreferences().edit().putString(UserPreferencesKey.PASSWORD,password).apply()
+    }
 
     override fun setSignUpStatus(step: Int) {
-        TODO("Not yet implemented")
+        getAppPreferences().edit().putInt(AppEssentialKeys.SIGN_UP_STEP,step).apply()
     }
 
     override fun setUserLoginStatus(logged: Boolean) {
-        TODO("Not yet implemented")
+        getAppPreferences().edit().putBoolean(UserPreferencesKey.IS_LOGGED_IN,logged).apply()
     }
 
     override fun logout() {
-        TODO("Not yet implemented")
+        preferences.apply {
+            this.edit().clear()
+            this.edit().commit()
+        }
+    }
+    private fun getAppPreferences():SharedPreferences{
+        return preferences
     }
 
     companion object{
@@ -55,14 +82,17 @@ class PersistentHelper(
         private const val SECURED_KEY_ALIAS = "compose_signup_secured_store"
 
         object UserPreferencesKey{
-
+            const val USER_NAME = "user_name"
+            const val USER_EMAIL = "user_email"
+            const val PASSWORD = "password"
+            const val IS_LOGGED_IN = "is_user_logged_in"
         }
         object AppEssentialKeys{
             const val WELCOME_SCREEN_SHOWED = "welcome_screen_showed"
+            const val SIGN_UP_STEP = "sign_up_step"
+
+
         }
 
     }
-
-
-
 }

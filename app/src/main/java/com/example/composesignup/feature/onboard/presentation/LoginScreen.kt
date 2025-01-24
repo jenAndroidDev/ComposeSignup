@@ -1,7 +1,5 @@
 package com.example.composesignup.feature.onboard.presentation
 
-
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,6 +29,7 @@ import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
 import com.example.composesignup.core.utils.TextFieldException
 import com.example.composesignup.ui.theme.GreyWhite
 import kotlinx.coroutines.flow.StateFlow
+import timber.log.Timber
 
 /*
 * TODO==>Form Validation
@@ -74,10 +73,8 @@ private fun LoginTextFields(
 ){
     val navigateToForgotPasswordScreen = viewModel.uiState.collectAsStateWithLifecycle().value.navToPasswordScreen
     if (navigateToForgotPasswordScreen){
-        Log.d(
-            Tag,
-            "LoginTextFields() called with: modifier = $modifier, viewModel = $viewModel, uiAction = $uiAction, onForgotPasswordClick = $navigateToForgotPasswordScreen"
-        )
+        Timber.tag(Tag)
+            .d("LoginTextFields() called with: modifier = " + modifier + ", viewModel = " + viewModel + ", uiAction = " + uiAction + ", onForgotPasswordClick = " + navigateToForgotPasswordScreen)
         onForgotPasswordClick.invoke()
         uiAction.invoke(LoginUiAction.ResetNavOptions)
     }

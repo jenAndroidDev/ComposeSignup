@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.core.os.trace
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.composesignup.core.di.AppDependencies
 import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.core.utils.TextFieldException
 import com.example.composesignup.utlis.UiText
@@ -18,13 +19,14 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 private const val Tag = "LoginViewModel"
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val sessionManager: SessionManager):ViewModel() {
     /**
-     *
+     *1.
      * */
     var email by mutableStateOf("")
         private set
@@ -118,24 +120,20 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
         }
     }
     private fun getSignupCredentials(){
-        viewModelScope.launch(Dispatchers.IO) {
-            userEmail = sessionManager.getUserEmail().map{
-                it?.joinToString()
-            }.firstOrNull()?:""
-            userPassword = sessionManager.getUserPassword().map {
-                it?.joinToString()
-            }.firstOrNull()?:""
-            val isUserSignedIn = sessionManager.getSignupStatus().firstOrNull()?:0
+        viewModelScope.launch {
+            val name = AppDependencies.persistentStore
+                ?.name
+            userEmail = AppDependencies.persistentStore?.email?:""
+            userPassword = AppDependencies.persistentStore?.password?:""
+            val isUserSignedIn = AppDependencies.persistentStore?.signUpStep
             val loginCredentials = LoginCredentials(userEmail,userPassword)
-            Log.d(Tag, "null() called...$isUserSigned")
-            Log.d(Tag, "getSignupCredentials() called...$isUserSignedIn")
+            Timber.tag(Tag).d("signupCredentials...$name,$userEmail,$userPassword")
             _uiState.update {
                 it.copy(
                     loginCredentials = loginCredentials
                 )
             }
             if (isUserSignedIn==1)validateCredentials()
-            Log.d(Tag, "sessionManager...$userEmail,$userPassword")
         }
     }
 }
