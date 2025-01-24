@@ -151,10 +151,6 @@ class SignUpViewModel @Inject constructor(
                         setSignUpStatus(1)
                     }
             }
-            val userName = AppDependencies.persistentStore?.name?:""
-            val userEmail = AppDependencies.persistentStore?.email?:""
-            val userPassword = AppDependencies.persistentStore?.password?:""
-            Timber.tag(Tag).d("userName...$userName,$userEmail,$userPassword")
             _uiState.update {
                 it.copy(
                     isInputValid = true,

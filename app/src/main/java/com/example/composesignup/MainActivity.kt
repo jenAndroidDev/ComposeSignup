@@ -16,10 +16,12 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.composesignup.core.di.AppDependencies
 import com.example.composesignup.core.navigation.rememberComposeSignUpState
 import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.example.composesignup.feature.onboard.navigation.ONBOARD_ROUTE
+import com.example.composesignup.feature.onboard.navigation.SIGNUP_ROUTE
 import com.example.composesignup.feature.welcome.navigation.WELCOME_ROUTE
 import com.example.composesignup.ui.theme.ComposeSignupTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,23 +56,16 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ComposeSignupTheme {
-                /*
-                *
-                * This way of collecting flows disrupts the login flow since */
-                val isNewUser = runBlocking {
-                    sessionManager.getUserLoginStatus().firstOrNull()?:false
-                }
-                val signUpStep = runBlocking {
-                    sessionManager.getSignupStatus().firstOrNull()?:-1
-                }
+                val isNewUser = AppDependencies.persistentStore?.isUserLoggedIn?:false
+                val signUpStep = AppDependencies.persistentStore?.signUpStep
                 Timber.tag(Tag).d("$isNewUser,$signUpStep")
                 val startDestination = runBlocking {
                     if (isNewUser && signUpStep==0) {
                         ONBOARD_ROUTE
                     }else if(!isNewUser && signUpStep==0){
-                        ONBOARD_ROUTE
+                        SIGNUP_ROUTE
                     }else{
-                        ONBOARD_ROUTE
+                        FOR_YOU_ROUTE
                     }
                 }
                 val appState = rememberComposeSignUpState()
