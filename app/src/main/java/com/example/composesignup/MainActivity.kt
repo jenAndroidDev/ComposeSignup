@@ -8,10 +8,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.example.composesignup.core.di.AppDependencies
@@ -19,7 +16,6 @@ import com.example.composesignup.core.navigation.rememberComposeSignUpState
 import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.feature.foryou.navigation.FOR_YOU_ROUTE
 import com.example.composesignup.feature.onboard.navigation.ONBOARD_ROUTE
-import com.example.composesignup.feature.onboard.navigation.SIGNUP_ROUTE
 import com.example.composesignup.feature.welcome.navigation.WELCOME_ROUTE
 import com.example.composesignup.ui.theme.ComposeSignupTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,12 +27,6 @@ import javax.inject.Inject
 private const val Tag = "MainActivity"
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    /*
-    * Reverting From DataStore To SharedPref*/
-
-    @Inject
-    lateinit var sessionManager: SessionManager
-    private val viewModel by viewModels<MainActivityViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -49,7 +39,6 @@ class MainActivity : ComponentActivity() {
                 Color.TRANSPARENT,Color.TRANSPARENT
             )
         )
-
         setContent {
             ComposeSignupTheme {
                 val isUserLoggedIn = AppDependencies.persistentStore?.isUserLoggedIn?:false
@@ -65,7 +54,6 @@ class MainActivity : ComponentActivity() {
                         FOR_YOU_ROUTE
                     }
                 }
-                //val startDestination = WELCOME_ROUTE
                 val appState = rememberComposeSignUpState()
                 ComposeSignUpApp(appState = appState, startDestination = startDestination)
             }
@@ -78,26 +66,4 @@ private fun MainScreen(
 
 ){
 
-
-
-
-
-
-
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ComposeSignupTheme {
-        Greeting("Android")
-    }
 }

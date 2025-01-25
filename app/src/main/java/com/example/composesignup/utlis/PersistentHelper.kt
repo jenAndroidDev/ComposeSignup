@@ -1,6 +1,5 @@
 package com.example.composesignup.utlis
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
@@ -97,9 +96,6 @@ class PersistentHelper(
         object AppEssentialKeys{
             const val WELCOME_SCREEN_SHOWED = "welcome_screen_showed"
             const val SIGN_UP_STEP = "sign_up_step"
-
-
         }
-
     }
 }
