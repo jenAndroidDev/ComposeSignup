@@ -59,15 +59,16 @@ class MainActivity : ComponentActivity() {
                 val isNewUser = AppDependencies.persistentStore?.isUserLoggedIn?:false
                 val signUpStep = AppDependencies.persistentStore?.signUpStep
                 Timber.tag(Tag).d("$isNewUser,$signUpStep")
-                val startDestination = runBlocking {
-                    if (isNewUser && signUpStep==0) {
-                        ONBOARD_ROUTE
-                    }else if(!isNewUser && signUpStep==0){
-                        SIGNUP_ROUTE
-                    }else{
-                        FOR_YOU_ROUTE
-                    }
-                }
+//                val startDestination = runBlocking {
+//                    if (isNewUser && signUpStep==0) {
+//                        ONBOARD_ROUTE
+//                    }else if(!isNewUser && signUpStep==0){
+//                        SIGNUP_ROUTE
+//                    }else{
+//                        FOR_YOU_ROUTE
+//                    }
+//                }
+                val startDestination = WELCOME_ROUTE
                 val appState = rememberComposeSignUpState()
                 ComposeSignUpApp(appState = appState, startDestination = startDestination)
             }

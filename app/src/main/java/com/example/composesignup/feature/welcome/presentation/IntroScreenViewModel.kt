@@ -3,6 +3,7 @@ package com.example.composesignup.feature.welcome.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composesignup.R
+import com.example.composesignup.core.di.AppDependencies
 import com.example.composesignup.core.sessionManager.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -35,12 +36,7 @@ class IntroScreenViewModel @Inject constructor(
     private fun onUiAction(action: IntroScreenUiAction){
         when(action){
             is IntroScreenUiAction.SetWelcomeScreenStatus,
-            is IntroScreenUiAction.IntroScreenSkipped->{
-                viewModelScope.launch() {
-                    sessionManager.setWelcomeScreenStatus(true)
-                }
-                Timber.tag(Tag).d("onUiAction() called with: action = " + action)
-            }
+            is IntroScreenUiAction.IntroScreenSkipped->{}
             is IntroScreenUiAction.RefreshInternal->{
                 _uiState.update {
                     it.copy(
@@ -49,6 +45,8 @@ class IntroScreenViewModel @Inject constructor(
                 }
             }
             is IntroScreenUiAction.IntroScreenSlideCompleted->{
+                AppDependencies.persistentStore?.setWelcomeScreenStatus(true)
+                val isWelcomeScreenShown = AppDependencies.persistentStore?.isWelcomeScreenShown
                 viewModelScope.launch(Dispatchers.IO) {
                     _uiState.update {
                         it.copy(
@@ -56,7 +54,7 @@ class IntroScreenViewModel @Inject constructor(
                         )
                     }
                 }
-                Timber.tag(Tag).d("onUiAction() called with: action = " + action)
+                Timber.tag(Tag).d("onUiAction() called with: action = " + isWelcomeScreenShown)
             }
         }
     }

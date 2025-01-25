@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -73,9 +74,10 @@ fun IntroScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.background),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+            .background(
+                 color = MaterialTheme.colorScheme.background),
+                 horizontalAlignment = Alignment.CenterHorizontally,
+                 verticalArrangement = Arrangement.Top
     ) {
         Title(modifier)
         Spacer(modifier = modifier.height(24.dp))
@@ -84,13 +86,15 @@ fun IntroScreen(
             viewModel = viewModel
             )
         Spacer(modifier = modifier.weight(1f))
-        ComposeSignUpButton(text = "Next",
+        ComposeSignUpButton(
+            text = stringResource(R.string.next),
             textColor = Green80,
             backgroundColor = Green40) {
             uiAction.invoke(IntroScreenUiAction.IntroScreenSlideCompleted)
         }
         Spacer(modifier = modifier.height(12.dp))
-        ComposeSignUpButton(text = "Skip",
+        ComposeSignUpButton(
+            text = stringResource(R.string.skip),
             textColor = Green80,
             backgroundColor = Color.White,
             borderColor = Color.Gray.copy(alpha = 0.2f),
