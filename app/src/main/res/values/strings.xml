@@ -16,4 +16,6 @@
     <string name="app_logo">app_logo</string>
     <string name="forgot_password_title">Forgot Password</string>
     <string name="forgot_password_description">Enter your email account to reset password</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
 </resources>

@@ -96,9 +96,8 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
                             uiText = UiText.DynamicString("Successfull Login")
                         )
                     }
-                    sessionManager.run {
-                        setUserLoginStatus(true)
-                    }
+                    AppDependencies.persistentStore?.setUserLoginStatus(true)
+                    Timber.tag(Tag).d("loginStatus...${AppDependencies.persistentStore?.isUserLoggedIn}")
                 } else if (email!=userCredentials?.email || password!=userCredentials.password) {
                     _uiState.update {
                         it.copy(

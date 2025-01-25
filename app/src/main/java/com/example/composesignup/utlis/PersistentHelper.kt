@@ -25,6 +25,9 @@ class PersistentHelper(
     override val password: String
         get() = getAppPreferences().getString(UserPreferencesKey.PASSWORD,"")?:""
 
+    override val isWelcomeScreenShown: Boolean
+        get() = getAppPreferences().getBoolean(AppEssentialKeys.WELCOME_SCREEN_SHOWED,false)
+
     override fun setUserName(name: String) {
         getAppPreferences().edit().putString(UserPreferencesKey.USER_NAME,name).apply()
     }
@@ -43,6 +46,10 @@ class PersistentHelper(
 
     override fun setUserLoginStatus(logged: Boolean) {
         getAppPreferences().edit().putBoolean(UserPreferencesKey.IS_LOGGED_IN,logged).apply()
+    }
+
+    override fun setWelcomeScreenStatus(shown: Boolean) {
+        getAppPreferences().edit().putBoolean(AppEssentialKeys.WELCOME_SCREEN_SHOWED,shown).apply()
     }
 
     override fun logout() {
