@@ -54,7 +54,6 @@ fun OnboardScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(color = GREY20)
             .windowInsetsPadding(WindowInsets.statusBars)
     ) {
         ComposeSignupOnBoardHeader(
