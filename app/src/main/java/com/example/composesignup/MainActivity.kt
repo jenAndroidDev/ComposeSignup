@@ -14,8 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.composesignup.core.di.AppDependencies
 import com.example.composesignup.core.navigation.rememberComposeSignUpState
 import com.example.composesignup.core.sessionManager.SessionManager
@@ -26,11 +24,9 @@ import com.example.composesignup.feature.welcome.navigation.WELCOME_ROUTE
 import com.example.composesignup.ui.theme.ComposeSignupTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.math.sign
 
 private const val Tag = "MainActivity"
 @AndroidEntryPoint
@@ -56,19 +52,20 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             ComposeSignupTheme {
-                val isNewUser = AppDependencies.persistentStore?.isUserLoggedIn?:false
+                val isUserLoggedIn = AppDependencies.persistentStore?.isUserLoggedIn?:false
                 val signUpStep = AppDependencies.persistentStore?.signUpStep
-                Timber.tag(Tag).d("$isNewUser,$signUpStep")
-//                val startDestination = runBlocking {
-//                    if (isNewUser && signUpStep==0) {
-//                        ONBOARD_ROUTE
-//                    }else if(!isNewUser && signUpStep==0){
-//                        SIGNUP_ROUTE
-//                    }else{
-//                        FOR_YOU_ROUTE
-//                    }
-//                }
-                val startDestination = WELCOME_ROUTE
+                val isWelcomeScreenShown = AppDependencies.persistentStore?.isWelcomeScreenShown?:false
+                Timber.tag(Tag).d("$isUserLoggedIn,$signUpStep,$isWelcomeScreenShown")
+                val startDestination = runBlocking {
+                    if (!isUserLoggedIn && !isWelcomeScreenShown) {
+                        WELCOME_ROUTE
+                    }else if(!isUserLoggedIn && isWelcomeScreenShown){
+                        ONBOARD_ROUTE
+                    }else{
+                        FOR_YOU_ROUTE
+                    }
+                }
+                //val startDestination = WELCOME_ROUTE
                 val appState = rememberComposeSignUpState()
                 ComposeSignUpApp(appState = appState, startDestination = startDestination)
             }
