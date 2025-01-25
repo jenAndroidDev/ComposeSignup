@@ -7,13 +7,13 @@ plugins {
 
 android {
     namespace = "com.example.composesignup"
-    compileSdk = 34
+    compileSdk = 35
 
 
     defaultConfig {
         applicationId = "com.example.composesignup"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "0.1.3"//X:Y:Z;X=Major,Y=Minor,Z=Patch
 
