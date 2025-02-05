@@ -1,6 +1,6 @@
 package com.example.composesignup.feature.onboard.domain.usecase
 
-import androidx.compose.material3.Text
+
 import com.example.composesignup.core.utils.TextFieldException
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
@@ -13,7 +13,8 @@ class EmailValidatorTest{
     private lateinit var emailUseCase:EmailValidatorUseCase
     private lateinit var useCase: InputFormUseCase
     private var validEmail = "rjjeninjoseph@gmail.com"
-    private var invalidEmail = ""
+    private var emptyEmail = ""
+    private var invalidEmail = "jeninjosephgmail.com"
     private var validUserName = "Jenin Joseph"
     private var invalidUserName  = ""
 
@@ -43,6 +44,11 @@ class EmailValidatorTest{
         assertThat(result.success).isTrue()
     }
 
+    @Test
+    fun invalidate_ifUserEmail_isEmpty() = runTest {
+        val result = useCase.userEmailUseCase.invoke(emptyEmail)
+        assertThat(result.exception).isInstanceOf(TextFieldException::class.java)
+    }
     @Test
     fun invalidate_ifUserEmail_isInValid() = runTest{
         val result = useCase.userEmailUseCase.invoke(invalidEmail)
