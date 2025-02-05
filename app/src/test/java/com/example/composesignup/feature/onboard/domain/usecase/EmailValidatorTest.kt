@@ -11,6 +11,7 @@ class EmailValidatorTest{
 
     private lateinit var nameUseCase:UserNameValidatorUseCase
     private lateinit var emailUseCase:EmailValidatorUseCase
+    private lateinit var passwordUseCase: PasswordValidationUseCase
     private lateinit var useCase: InputFormUseCase
     private var validEmail = "rjjeninjoseph@gmail.com"
     private var emptyEmail = ""
@@ -22,9 +23,7 @@ class EmailValidatorTest{
     fun setUp(){
         nameUseCase = UserNameValidatorUseCase()
         emailUseCase = EmailValidatorUseCase()
-        useCase = InputFormUseCase(
-            nameUseCase,emailUseCase
-        )
+        useCase = InputFormUseCase(nameUseCase,emailUseCase,passwordUseCase)
     }
 
     @Test

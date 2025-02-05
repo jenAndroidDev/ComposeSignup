@@ -52,8 +52,6 @@ class SignUpViewModel @Inject constructor(
          * Check whether the user has already signed in or not. */
 
         Timber.tag(Tag).d("userSignedStatus...$hasUserSignedIn")
-
-
     }
     private fun onUiAction(action: SignUpUiAction){
         when(action){
@@ -76,7 +74,8 @@ class SignUpViewModel @Inject constructor(
             }
             is SignUpUiAction.Password->{
                 password=action.password
-                    if (isPasswordValid(password)){
+                val passwordResult = useCase.passwordUseCase.invoke(password)
+                    if (passwordResult.success){
                         _uiState.update {
                             it.copy(
                                 isPasswordSizeValid = true,
@@ -109,7 +108,7 @@ class SignUpViewModel @Inject constructor(
             }
         }
     }
-
+    /*Move this to use case*/
     private fun isPasswordValid(password:String):Boolean{
         val pattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$".toRegex()
         return password.matches(pattern)
@@ -187,6 +186,7 @@ class SignUpViewModel @Inject constructor(
         val password = password
         val emailValidation = useCase.userEmailUseCase.invoke(userEmail)
         val userNameValidation = useCase.userNameUseCase.invoke(userName)
+        Timber.tag(Tag).d("formValidation...$userEmail,$userName,$password")
 
         if (isTermsAccepted && isPasswordConfirmed && emailValidation.success && userNameValidation.success ){
             AppDependencies.persistentStore?.run {
