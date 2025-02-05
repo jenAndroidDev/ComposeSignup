@@ -18,6 +18,7 @@ dataStore = "1.1.1"
 timber = "5.0.1"
 material = "1.12.0"
 splashScreenApi="1.0.1"
+kotlinxCoroutines = "1.8.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -44,6 +45,10 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-splash-screen={group="androidx.core",name="core-splashscreen",version.ref="splashScreenApi"}
 timber = {group="com.jakewharton.timber",name="timber",version.ref="timber"}
 androidx-security-crypto-ktx = { module = "androidx.security:security-crypto-ktx", version.ref = "androidxCrypto" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
