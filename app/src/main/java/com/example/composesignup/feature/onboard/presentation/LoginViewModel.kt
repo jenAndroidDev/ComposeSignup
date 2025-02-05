@@ -46,12 +46,6 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
         action ={
             onUiAction(it)
         }
-        onTestCredentials()
-    }
-    private fun onTestCredentials(){
-        viewModelScope.launch(Dispatchers.IO) {
-
-        }
     }
     private fun onUiAction(action: LoginUiAction){
         when(action){
@@ -132,6 +126,7 @@ class LoginViewModel @Inject constructor(private val sessionManager: SessionMana
                     loginCredentials = loginCredentials
                 )
             }
+            validateCredentials()
             if (isUserSignedIn==1)validateCredentials()
         }
     }

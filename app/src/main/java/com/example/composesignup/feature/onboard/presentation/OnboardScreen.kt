@@ -55,6 +55,7 @@ fun OnboardScreen(
         modifier = modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.statusBars)
+
     ) {
         ComposeSignupOnBoardHeader(
             modifier = modifier,

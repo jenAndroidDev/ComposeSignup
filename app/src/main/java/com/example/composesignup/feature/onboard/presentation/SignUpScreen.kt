@@ -98,7 +98,6 @@ fun SignUpScreen(
     }//Column
 }
 
-//is it a good practice to pass viewmodel as a parameter??
 @Composable
 fun SignUpTextFields(
     modifier: Modifier,

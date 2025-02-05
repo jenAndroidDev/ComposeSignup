@@ -45,16 +45,15 @@ class IntroScreenViewModel @Inject constructor(
                 }
             }
             is IntroScreenUiAction.IntroScreenSlideCompleted->{
-                AppDependencies.persistentStore?.setWelcomeScreenStatus(true)
-                val isWelcomeScreenShown = AppDependencies.persistentStore?.isWelcomeScreenShown
-                viewModelScope.launch(Dispatchers.IO) {
-                    _uiState.update {
-                        it.copy(
-                            isWelcomeSlideCompleted = true
-                        )
-                    }
-                }
-                Timber.tag(Tag).d("onUiAction() called with: action = " + isWelcomeScreenShown)
+                introSlidesCompleted()
+            }
+        }
+    }
+    private fun introSlidesCompleted(){
+        AppDependencies.persistentStore?.setWelcomeScreenStatus(true)
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update {
+                it.copy(isWelcomeSlideCompleted = true)
             }
         }
     }

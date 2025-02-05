@@ -3,6 +3,9 @@ package com.example.composesignup.core.di
 import android.content.Context
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.composesignup.core.sessionManager.SessionManager
+import com.example.composesignup.feature.onboard.domain.usecase.EmailValidatorUseCase
+import com.example.composesignup.feature.onboard.domain.usecase.InputFormUseCase
+import com.example.composesignup.feature.onboard.domain.usecase.UserNameValidatorUseCase
 import com.example.composesignup.utlis.PersistentHelper
 import dagger.Module
 import dagger.Provides
@@ -24,4 +27,11 @@ object AppModule {
     @Provides
     @Singleton
     fun providePersistentStore(@ApplicationContext context: Context) = PersistentHelper.getInstance(application = context)
+
+    @Provides
+    @Singleton
+    fun provideInputFormUseCase() = InputFormUseCase(
+        userEmailUseCase = EmailValidatorUseCase(),
+        userNameUseCase = UserNameValidatorUseCase()
+    )
 }
