@@ -9,9 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.composesignup.core.di.AppDependencies
 import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.core.utils.TextFieldException
+import com.example.composesignup.feature.onboard.domain.usecase.InputFormUseCase
 import com.example.composesignup.utlis.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,7 +22,8 @@ import javax.inject.Inject
 private const val Tag = "SignUpViewModel"
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val useCase: InputFormUseCase
 ):ViewModel() {
     private val _uiState = MutableStateFlow(SignUpUiState())
     val uiState = _uiState.asStateFlow()
@@ -58,7 +59,7 @@ class SignUpViewModel @Inject constructor(
         when(action){
             is SignUpUiAction.SignUp->{
                 hasUserSignedIn = AppDependencies.persistentStore?.signUpStep==1
-                if (!hasUserSignedIn) validateUserInput() else _uiState.update {
+                if (!hasUserSignedIn) validateSignupForm() else _uiState.update {
                     it.copy(
                         exception = TextFieldException(),
                         uiText = UiText.DynamicString("You Have Already Signed In Please Log in to Continue")
@@ -131,6 +132,7 @@ class SignUpViewModel @Inject constructor(
             }
         }
     }
+    /*Refactor the Function with use case.*/
     private fun validateUserInput(){
         val isPasswordConfirmed = uiState.value.isPasswordMatching
         val isTermsAccepted = uiState.value.isTermsAccepted
@@ -177,6 +179,49 @@ class SignUpViewModel @Inject constructor(
             }
         }
     }
+    private fun validateSignupForm(){
+        val isPasswordConfirmed = uiState.value.isPasswordMatching
+        val isTermsAccepted = uiState.value.isTermsAccepted
+        val userEmail = email
+        val userName = userName
+        val password = password
+        val emailValidation = useCase.userEmailUseCase.invoke(userEmail)
+        val userNameValidation = useCase.userNameUseCase.invoke(userName)
+
+        if (isTermsAccepted && isPasswordConfirmed && emailValidation.success && userNameValidation.success ){
+            AppDependencies.persistentStore?.run {
+                setUserName(userName)
+                setUserEmail(userEmail)
+                setUserPassword(password)
+                setSignUpStatus(1)
+            }
+            _uiState.update {
+                it.copy(
+                    isInputValid = true,
+                    exception = TextFieldException(),
+                    uiText = UiText.DynamicString(value = "Successfully Created Account.Please Login In.")
+                )
+            }
+        }else if(emailValidation.success && userNameValidation.success
+            && !isTermsAccepted && isPasswordConfirmed){
+            _uiState.update {
+                it.copy(
+                    isInputValid = false,
+                    exception = TextFieldException(),
+                    uiText = UiText.DynamicString(value = "Please Accept Terms and Conditions")
+                )
+            }
+        }else{
+            _uiState.update {
+                it.copy(
+                    isInputValid = false,
+                    exception = TextFieldException(),
+                    uiText = UiText.DynamicString("Please Enter All the required fields")
+                )
+            }
+        }
+    }
+
     private fun uiErrorShown(){
         _uiState.update {
             it.copy(
