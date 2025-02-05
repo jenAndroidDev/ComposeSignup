@@ -5,6 +5,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.feature.onboard.domain.usecase.EmailValidatorUseCase
 import com.example.composesignup.feature.onboard.domain.usecase.InputFormUseCase
+import com.example.composesignup.feature.onboard.domain.usecase.PasswordValidationUseCase
 import com.example.composesignup.feature.onboard.domain.usecase.UserNameValidatorUseCase
 import com.example.composesignup.utlis.PersistentHelper
 import dagger.Module
@@ -32,6 +33,7 @@ object AppModule {
     @Singleton
     fun provideInputFormUseCase() = InputFormUseCase(
         userEmailUseCase = EmailValidatorUseCase(),
-        userNameUseCase = UserNameValidatorUseCase()
+        userNameUseCase = UserNameValidatorUseCase(),
+        passwordUseCase = PasswordValidationUseCase()
     )
 }
