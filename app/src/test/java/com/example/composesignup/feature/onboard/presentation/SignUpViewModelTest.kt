@@ -26,6 +26,8 @@ class SignUpViewModelTest{
         private const val USER_EMAIL = "rjjeninjoseph@gmail.com"
         private const val USER_NAME = "Jenin Joseph R J"
         private const val PASSWORD = "JENINJOSEPH"
+        private const val CONFIRM_PASSWORD = "JENINJOSEPH"
+        private const val INCORRECT_PASSWORD = "RJJENINJOSEPH"
     }
 
     @Before
@@ -54,6 +56,20 @@ class SignUpViewModelTest{
     fun uiState_whenPassword_isEntered_then_passwordShouldBeUpdated() = runTest {
         viewModel.action.invoke(SignUpUiAction.Password(PASSWORD))
         assertEquals(PASSWORD,viewModel.password)
+    }
+
+    @Test
+    fun uiState_whenPasswordReEntered_then_confirmPasswordShouldBeUpdated() = runTest {
+        viewModel.action.invoke(SignUpUiAction.ConfirmPassword(CONFIRM_PASSWORD))
+        assertEquals(CONFIRM_PASSWORD,viewModel.confirmPassword)
+    }
+
+    @Test
+    fun uiState_check_ifPasswords_areSame() = runTest{
+        viewModel.action.invoke(SignUpUiAction.Password(PASSWORD))
+        viewModel.action.invoke(SignUpUiAction.ConfirmPassword(CONFIRM_PASSWORD))
+
+        assertEquals(viewModel.password,viewModel.confirmPassword)
     }
 
 
