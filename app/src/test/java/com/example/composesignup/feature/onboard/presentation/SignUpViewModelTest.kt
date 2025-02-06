@@ -5,6 +5,10 @@ import com.example.composesignup.feature.onboard.domain.usecase.EmailValidatorUs
 import com.example.composesignup.feature.onboard.domain.usecase.InputFormUseCase
 import com.example.composesignup.feature.onboard.domain.usecase.PasswordValidationUseCase
 import com.example.composesignup.feature.onboard.domain.usecase.UserNameValidatorUseCase
+import com.example.composesignup.utlis.UiText
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
@@ -72,6 +76,12 @@ class SignUpViewModelTest{
         assertEquals(viewModel.password,viewModel.confirmPassword)
     }
 
-
+    @Test
+    fun uiState_when_uiError_isShown() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()){viewModel.uiState.collect()}
+        assertEquals(null,viewModel.uiState.value.exception)
+        assertEquals( null,viewModel.uiState.value.uiText)
+        collectJob.cancel()
+    }
 
 }
