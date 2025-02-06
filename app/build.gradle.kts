@@ -77,6 +77,7 @@ dependencies {
     //hilt
     implementation(libs.hilt.android)
     implementation(libs.material)
+    implementation(libs.junit.junit)
     ksp(libs.hilt.compiler)
 
     //navigation
@@ -95,7 +96,7 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation("com.google.truth:truth:1.4.4")
-    testImplementation(libs.kotlinx.coroutines.test)
+    implementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
