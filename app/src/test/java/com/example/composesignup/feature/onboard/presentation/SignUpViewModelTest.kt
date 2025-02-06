@@ -5,6 +5,7 @@ import com.example.composesignup.feature.onboard.domain.usecase.EmailValidatorUs
 import com.example.composesignup.feature.onboard.domain.usecase.InputFormUseCase
 import com.example.composesignup.feature.onboard.domain.usecase.PasswordValidationUseCase
 import com.example.composesignup.feature.onboard.domain.usecase.UserNameValidatorUseCase
+import com.example.composesignup.utlis.UiText
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -32,6 +33,7 @@ class SignUpViewModelTest{
         private const val CONFIRM_PASSWORD = "JENINJOSEPH"
         private const val INCORRECT_PASSWORD = "RJJENINJOSEPH"
         private const val ACCEPT_TERMS_AND_CONDTIONS = true
+        private const val INPUT_VALID = "Successfully Created Account.Please Login In."
     }
 
     @Before
@@ -109,7 +111,20 @@ class SignUpViewModelTest{
 
         viewModel.action.invoke(SignUpUiAction.UserName(USER_NAME))
         viewModel.action.invoke(SignUpUiAction.Email(USER_EMAIL))
-        //viewModel.action.invoke(SignUpUiAction.)
+        viewModel.action.invoke(SignUpUiAction.Password(PASSWORD))
+        viewModel.action.invoke(SignUpUiAction.ConfirmPassword(PASSWORD))
+        viewModel.action.invoke(SignUpUiAction.ToggleTermsAndCondition)
+        viewModel.action.invoke(SignUpUiAction.SignUp)
+
+        assertEquals(
+            true,viewModel.uiState.value.isInputValid
+        )
+
+        assertEquals(
+            INPUT_VALID,((viewModel.uiState.value.uiText) as UiText.DynamicString).value
+        )
+
+        collectJob.cancel()
     }
 
 }
