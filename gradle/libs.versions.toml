@@ -6,6 +6,7 @@ coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+kotlinTest = "2.1.10"
 lifecycleRuntimeKtx = "2.8.3"
 activityCompose = "1.9.0"
 composeBom = "2023.08.00"
@@ -42,6 +43,7 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-ext-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltExt" }
 hilt-navigation = {group="androidx.hilt",name="hilt-navigation-compose",version.ref = "hiltnavigation"}
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-splash-screen={group="androidx.core",name="core-splashscreen",version.ref="splashScreenApi"}
 timber = {group="com.jakewharton.timber",name="timber",version.ref="timber"}
