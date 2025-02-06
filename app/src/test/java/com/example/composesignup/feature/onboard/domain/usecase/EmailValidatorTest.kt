@@ -23,6 +23,7 @@ class EmailValidatorTest{
     fun setUp(){
         nameUseCase = UserNameValidatorUseCase()
         emailUseCase = EmailValidatorUseCase()
+        passwordUseCase = PasswordValidationUseCase()
         useCase = InputFormUseCase(nameUseCase,emailUseCase,passwordUseCase)
     }
 

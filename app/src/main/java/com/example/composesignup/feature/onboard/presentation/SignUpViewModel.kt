@@ -5,7 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.composesignup.core.di.AppDependencies
 import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.core.utils.TextFieldException
@@ -22,7 +21,6 @@ import javax.inject.Inject
 private const val Tag = "SignUpViewModel"
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
-    private val sessionManager: SessionManager,
     private val useCase: InputFormUseCase
 ):ViewModel() {
     private val _uiState = MutableStateFlow(SignUpUiState())
@@ -108,11 +106,6 @@ class SignUpViewModel @Inject constructor(
             }
         }
     }
-    /*Move this to use case*/
-    private fun isPasswordValid(password:String):Boolean{
-        val pattern = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$".toRegex()
-        return password.matches(pattern)
-    }
 
     private fun confirmPassword(){
         val password = this.password
@@ -127,53 +120,6 @@ class SignUpViewModel @Inject constructor(
             _uiState.update {
                 it.copy(
                     isPasswordMatching = false
-                )
-            }
-        }
-    }
-    /*Refactor the Function with use case.*/
-    private fun validateUserInput(){
-        val isPasswordConfirmed = uiState.value.isPasswordMatching
-        val isTermsAccepted = uiState.value.isTermsAccepted
-        if (userName.isNotEmpty() && isPasswordConfirmed && email.isNotEmpty()
-            && isTermsAccepted){
-            viewModelScope.launch {
-                val name  = userName
-                val email  = email
-                val password = password
-                Timber.tag(Tag).d("validate...$name,$email,$password")
-                    AppDependencies.persistentStore?.run {
-                        setUserName(userName)
-                        setUserEmail(email)
-                        setUserPassword(password)
-                        setSignUpStatus(1)
-                    }
-            }
-            _uiState.update {
-                it.copy(
-                    isInputValid = true,
-                    exception = TextFieldException(),
-                    uiText = UiText.DynamicString(value = "Successfully Created Account.Please Login In.")
-                )
-            }
-        }else if (userName.isNotEmpty() && isPasswordConfirmed && email.isNotEmpty()
-            && !isTermsAccepted ){
-            Timber.tag(Tag).d("scenario!")
-            _uiState.update {
-                it.copy(
-                    isInputValid = false,
-                    exception = TextFieldException(),
-                    uiText = UiText.DynamicString("Please Accept Terms and Condition")
-
-                )
-            }
-        } else{
-            Timber.tag(Tag).d("scenario2")
-            _uiState.update {
-                it.copy(
-                    isInputValid = false,
-                    exception = TextFieldException(),
-                    uiText = UiText.DynamicString("Please Enter All the required fields")
                 )
             }
         }
