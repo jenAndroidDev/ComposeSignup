@@ -1,10 +1,8 @@
 package com.example.composesignup.feature.onboard.presentation
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.core.os.trace
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composesignup.core.di.AppDependencies
@@ -24,7 +22,7 @@ import javax.inject.Inject
 
 private const val Tag = "LoginViewModel"
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val sessionManager: SessionManager):ViewModel() {
+class LoginViewModel @Inject constructor():ViewModel() {
     /**
      *1.
      * */
