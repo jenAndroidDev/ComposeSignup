@@ -6,15 +6,14 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.composesignup.core.di.AppDependencies
-import com.example.composesignup.core.sessionManager.SessionManager
 import com.example.composesignup.core.utils.TextFieldException
+import com.example.composesignup.feature.onboard.domain.usecase.InputFormUseCase
+import com.example.composesignup.feature.onboard.domain.usecase.InputValidIUseCase
 import com.example.composesignup.utlis.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -22,7 +21,9 @@ import javax.inject.Inject
 
 private const val Tag = "LoginViewModel"
 @HiltViewModel
-class LoginViewModel @Inject constructor():ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val useCase: InputValidIUseCase
+):ViewModel() {
     /**
      *1.
      * */
@@ -77,25 +78,32 @@ class LoginViewModel @Inject constructor():ViewModel() {
             }
         }
     }
+    /*
+    * Refactoring this to Validate with the UseCases in The Domain Layer.*/
     private fun validateCredentials(){
         viewModelScope.launch {
                 val userCredentials = uiState.value.loginCredentials
-                if (email == userCredentials?.email && password == userCredentials.password) {
+                val userEmail = userCredentials?.email?:""
+                val userPassword= userCredentials?.password?:""
+
+                val emailUseCaseResult = useCase.emailMatcherUseCase.invoke(userEmail,email)
+                val passwordUseCaseResult = useCase.passwordMatcherUseCase.invoke(userPassword,password)
+
+            if (emailUseCaseResult.success && passwordUseCaseResult.success){
                     _uiState.update {
                         it.copy(
                             isValid = true,
                             exception = TextFieldException(),
-                            uiText = UiText.DynamicString("Successfull Login")
+                            uiText = UiText.DynamicString("Successful Login")
                         )
                     }
                     AppDependencies.persistentStore?.setUserLoginStatus(true)
-                    Timber.tag(Tag).d("loginStatus...${AppDependencies.persistentStore?.isUserLoggedIn}")
-                } else if (email!=userCredentials?.email || password!=userCredentials.password) {
+                }else if(emailUseCaseResult.success && !passwordUseCaseResult.success){
                     _uiState.update {
                         it.copy(
                             isValid = false,
-                            exception = TextFieldException(),
-                            uiText = UiText.DynamicString("Invalid Credentials")
+                            exception = passwordUseCaseResult.exception,
+                            uiText = UiText.DynamicString(passwordUseCaseResult.exception?.message?:"")
                         )
                     }
                 }
