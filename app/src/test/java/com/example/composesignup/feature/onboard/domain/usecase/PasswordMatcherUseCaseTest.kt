@@ -1,18 +1,24 @@
 package com.example.composesignup.feature.onboard.domain.usecase
 
-import com.google.common.truth.Truth.assertThat
+
 import kotlinx.coroutines.test.runTest
+import org.hamcrest.MatcherAssert.assertThat
 
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class PasswordMatcherUseCaseTest {
 
     private lateinit var emailMatcherUseCase: EmailMatcherUseCase
     private lateinit var passwordMatcherUseCase: PasswordMatcherUseCase
     private lateinit var inputValidIUseCase: InputValidIUseCase
-    private val EnteredPassword = "jenin"
-    private val SavedPassword = "jenin"
+    private val validInputPassword = "jenin"
+    private val validSavedPassword = "jenin"
+    private val inValidInputPassword ="joseph"
+    private val invalidSavedPassword = "joseph"
+
+
     @Before
     fun setUp() {
         emailMatcherUseCase = EmailMatcherUseCase()
@@ -22,7 +28,21 @@ class PasswordMatcherUseCaseTest {
 
     @Test
     fun verify_enteredPassword_matches_withSavedPassword() = runTest {
-        val result = passwordMatcherUseCase.invoke(EnteredPassword,SavedPassword)
-        assertThat(result.success)
+        val result = passwordMatcherUseCase.invoke(validInputPassword,validSavedPassword)
+
+        assertEquals(
+            true,
+            result.success)
     }
+
+    @Test
+    fun verify_enteredPassword_misMatches_withSavedPassword() = runTest {
+        val result = passwordMatcherUseCase.invoke(inValidInputPassword,validSavedPassword)
+
+        assertEquals(
+            false,
+            result.success
+        )
+    }
+
 }
