@@ -3,8 +3,11 @@ package com.example.composesignup.core.di
 import android.content.Context
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.composesignup.core.sessionManager.SessionManager
+import com.example.composesignup.feature.onboard.domain.usecase.EmailMatcherUseCase
 import com.example.composesignup.feature.onboard.domain.usecase.EmailValidatorUseCase
 import com.example.composesignup.feature.onboard.domain.usecase.InputFormUseCase
+import com.example.composesignup.feature.onboard.domain.usecase.InputValidIUseCase
+import com.example.composesignup.feature.onboard.domain.usecase.PasswordMatcherUseCase
 import com.example.composesignup.feature.onboard.domain.usecase.PasswordValidationUseCase
 import com.example.composesignup.feature.onboard.domain.usecase.UserNameValidatorUseCase
 import com.example.composesignup.utlis.PersistentHelper
@@ -35,5 +38,12 @@ object AppModule {
         userEmailUseCase = EmailValidatorUseCase(),
         userNameUseCase = UserNameValidatorUseCase(),
         passwordUseCase = PasswordValidationUseCase()
+    )
+
+    @Provides
+    @Singleton
+    fun provideInputValidUseCase() = InputValidIUseCase(
+        emailMatcherUseCase = EmailMatcherUseCase(),
+        passwordMatcherUseCase = PasswordMatcherUseCase()
     )
 }
