@@ -45,5 +45,15 @@ class LoginViewModelTest{
 
     }
 
+    @Test
+    fun uiState_when_inputParams_areVerified() = runTest {
+        val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
+
+        //viewModel.action.invoke(LoginUiAction.Email())
+        assertEquals(
+            true,viewModel.uiState.value.isValid
+        )
+    }
+
 
 }
