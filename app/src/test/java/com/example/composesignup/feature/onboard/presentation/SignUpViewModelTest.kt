@@ -6,6 +6,7 @@ import com.example.composesignup.feature.onboard.domain.usecase.InputFormUseCase
 import com.example.composesignup.feature.onboard.domain.usecase.PasswordValidationUseCase
 import com.example.composesignup.feature.onboard.domain.usecase.UserNameValidatorUseCase
 import com.example.composesignup.utlis.UiText
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -14,7 +15,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
-
+@OptIn(ExperimentalCoroutinesApi::class)
 class SignUpViewModelTest{
 
     @get:Rule
@@ -104,6 +105,7 @@ class SignUpViewModelTest{
 
         collectJob.cancel()
     }
+
 
     @Test
     fun uiState_whenInput_isValid_succesful_signUp() = runTest {
