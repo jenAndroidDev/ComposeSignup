@@ -73,7 +73,7 @@ fun ForgotPasswordScreen(
         Spacer(modifier = modifier.weight(1f))
         ComposeSignUpButton(
             modifier = modifier,
-            text = "Continue",
+            text = stringResource(R.string.btn_continue),
             textColor = Green80
 
         ) {
@@ -83,7 +83,7 @@ fun ForgotPasswordScreen(
         ComposeSignUpButton (
             modifier = modifier,
             backgroundColor = GREY20,
-            text = "Cancel",
+            text = stringResource(R.string.btn_cancel),
             borderColor = Color.Black.copy(alpha = 0.1f),
             textColor = Color.Black
         ){
@@ -106,7 +106,7 @@ private fun ForgotPasswordImage(
                 .fillMaxWidth()
                 .fillMaxHeight(0.6f),
             painter = painterResource(id = R.drawable.welcome_image4),
-            contentDescription = "intro_item",
+            contentDescription = stringResource(R.string.forgot_password_image_description),
             contentScale = ContentScale.Fit
         )
 }

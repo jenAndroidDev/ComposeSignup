@@ -18,4 +18,7 @@
     <string name="forgot_password_description">Enter your email account to reset password</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>
+    <string name="btn_continue">Continue</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="forgot_password_image_description">forgot password desc</string>
 </resources>
