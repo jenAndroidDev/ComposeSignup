@@ -108,7 +108,7 @@ class SignUpViewModelTest{
 
 
     @Test
-    fun uiState_whenInput_isValid_succesful_signUp() = runTest {
+    fun uiState_whenInput_isValid_succesfull_signUp() = runTest {
         val collectJob = launch(UnconfinedTestDispatcher()) { viewModel.uiState.collect() }
 
         viewModel.action.invoke(SignUpUiAction.UserName(USER_NAME))

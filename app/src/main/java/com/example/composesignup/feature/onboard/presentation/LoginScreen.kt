@@ -38,7 +38,7 @@ import timber.log.Timber
 private const val Tag = "LoginScreen"
 @Composable
 fun LoginScreen(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
     uiState: StateFlow<LoginUiState> = viewModel.uiState,
     uiAction: (LoginUiAction) -> Unit = viewModel.action,

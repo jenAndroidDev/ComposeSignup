@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun ForgotPasswordScreen(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     viewModel: ForgotPasswordViewModel = hiltViewModel(),
     uiState: StateFlow<ForgotPasswordUiState> = viewModel.uiState,
     uiAction:(ForgotPasswordUiAction)->Unit = viewModel.action,
