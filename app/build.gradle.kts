@@ -18,6 +18,7 @@ android {
         versionName = "0.1.3"//X:Y:Z;X=Major,Y=Minor,Z=Patch
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         vectorDrawables {
             useSupportLibrary = true
         }

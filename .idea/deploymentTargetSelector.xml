@@ -19,6 +19,15 @@
       <SelectionState runConfigName="forgotPasswordScreen_displayedCorrectly()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="ForgotPasswordScreenTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="forgotPasswordScreen_buttonsWorkingCorrectly()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="forgotPasswordScreen_enterEmail_toResetPassword()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>
