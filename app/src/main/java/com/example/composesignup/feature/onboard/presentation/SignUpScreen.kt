@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +35,7 @@ import com.example.composesignup.R
 import com.example.composesignup.core.designsystem.components.ComposeSignUpButton
 import com.example.composesignup.core.designsystem.components.ComposeSignUpTextField
 import com.example.composesignup.core.designsystem.icon.ComposeSignUpIcons
+import com.example.composesignup.core.testing.util.TestTag
 import com.example.composesignup.core.utils.TextFieldException
 import com.example.composesignup.ui.theme.Green40
 import com.example.composesignup.ui.theme.Green80
@@ -214,6 +216,7 @@ private fun TermsAndCondition(
             onCheckedChange = {
                 action.invoke(SignUpUiAction.ToggleTermsAndCondition)
             },
+            modifier = modifier.testTag(TestTag.SWITCH_TEST_TAG),
             colors = SwitchDefaults.colors(
                 checkedThumbColor = Green40,
                 uncheckedThumbColor = Green40.copy(alpha = 0.2f),

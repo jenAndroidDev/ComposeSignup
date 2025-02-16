@@ -13,19 +13,19 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="loginScreen_displayedCorrectly()">
+      <SelectionState runConfigName="signupScreen_displaysCorrectly()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="loginScreen_inputFields_performsCorrectly()">
+      <SelectionState runConfigName="signupScreen_verify_signupButton_worksCorrectly()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="loginScreen_passwordTextField_performsCorrectly()">
+      <SelectionState runConfigName="SignUpScreenTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="loginScreen_emailTextField_performsCorrectly()">
+      <SelectionState runConfigName="signupScreen_verify_toggleButton_togglesCorrectly()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="LoginScreenTest">
+      <SelectionState runConfigName="testSuccessfulSignUp()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
