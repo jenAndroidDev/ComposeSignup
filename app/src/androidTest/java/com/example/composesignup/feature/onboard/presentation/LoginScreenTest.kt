@@ -1,13 +1,20 @@
 package com.example.composesignup.feature.onboard.presentation
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performKeyInput
+import androidx.compose.ui.test.performTextInput
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.composesignup.MainActivity
+import com.example.composesignup.R
 import com.example.composesignup.core.navigation.TopLevelDestinations
 import com.example.composesignup.ui.theme.ComposeSignupTheme
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -24,47 +31,50 @@ class LoginScreenTest{
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
+    private lateinit var emailHint:String
+    private lateinit var passwordHint:String
+
     @Before
     fun setUp(){
-//        composeTestRule.setContent {
-//            val navController = rememberNavController()
-//            ComposeSignupTheme {
-//                NavHost(
-//                    navController = navController,
-//                    startDestination = ON
-//                ) {
-//                    composable(route = Screen.NotesScreen.route) {
-//                        NotesScreen(navController = navController)
-//                    }
-//                }
-//            }
-//        }
-    }
-
-    @Test
-    fun check_whether_loginButton_is_working(){
-        composeTestRule.onNodeWithText("")
-    }
-
-    @Composable
-    private fun LoginScreen(uiState: StateFlow<LoginUiState>){
-        LoginScreen(uiState = uiState) {
-
+        composeTestRule.activity.apply {
+            emailHint = getString(R.string.email_hint)
+            passwordHint = getString(R.string.password_hint)
         }
     }
+
     @Test
     fun loginScreen_displayedCorrectly() {
-        composeTestRule.setContent {
+        composeTestRule.activity.setContent {
             LoginScreen(onLoginSuccess = {})
         }
-
-        // Verify email field is displayed
-        composeTestRule.onNodeWithText("Email").assertExists()
-        // Verify password field is displayed
-        composeTestRule.onNodeWithText("Password").assertExists()
-        // Verify login button is displayed
+        composeTestRule.onNodeWithText(emailHint).assertExists()
+        composeTestRule.onNodeWithText(passwordHint).assertExists()
         composeTestRule.onNodeWithText("Login").assertExists()
-        // Verify Forgot Password text is displayed
         composeTestRule.onNodeWithText("Forgot Password?").assertExists()
+    }
+
+    @Test
+    fun loginScreen_emailTextField_performsCorrectly(){
+        composeTestRule.activity.setContent {
+            LoginScreen(onLoginSuccess = {})
+        }
+        val testEmail = "jenin@gmail.com"
+        composeTestRule.onNodeWithText(emailHint).performTextInput(testEmail)
+        composeTestRule.onNodeWithText(testEmail).assertTextContains(testEmail)
+
+//        composeTestRule.onNodeWithText(passwordHint).performTextInput(testPassword)
+//        composeTestRule.onNodeWithText(passwordHint).assertTextContains(testPassword)
+
+    }
+
+    @Test
+    fun loginScreen_passwordTextField_performsCorrectly(){
+        composeTestRule.activity.setContent {
+            LoginScreen {
+
+            }
+        }
+        val testPassword = "adamo"
+        composeTestRule.onNodeWithText(passwordHint).performTextInput(testPassword)
     }
 }

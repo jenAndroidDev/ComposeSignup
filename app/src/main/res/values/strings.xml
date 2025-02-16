@@ -21,4 +21,5 @@
     <string name="btn_continue">Continue</string>
     <string name="btn_cancel">Cancel</string>
     <string name="forgot_password_image_description">forgot password desc</string>
+    <string name="intro_screen_title">TaskForce</string>
 </resources>

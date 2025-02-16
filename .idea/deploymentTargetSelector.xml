@@ -16,16 +16,16 @@
       <SelectionState runConfigName="loginScreen_displayedCorrectly()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="forgotPasswordScreen_displayedCorrectly()">
+      <SelectionState runConfigName="loginScreen_inputFields_performsCorrectly()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ForgotPasswordScreenTest">
+      <SelectionState runConfigName="loginScreen_passwordTextField_performsCorrectly()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="forgotPasswordScreen_buttonsWorkingCorrectly()">
+      <SelectionState runConfigName="loginScreen_emailTextField_performsCorrectly()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="forgotPasswordScreen_enterEmail_toResetPassword()">
+      <SelectionState runConfigName="LoginScreenTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
