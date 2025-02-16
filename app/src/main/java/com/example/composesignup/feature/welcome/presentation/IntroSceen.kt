@@ -115,8 +115,8 @@ fun IntroScreen(
 @Composable
 private fun Title(modifier: Modifier){
     Text(
-        text = "TaskForce",
-        modifier =modifier.padding(top = 12.dp) ,
+        text = stringResource(R.string.intro_screen_title),
+        modifier =modifier.padding(top = 12.dp),
         style = MaterialTheme.typography.titleLarge,
         color = Green80,
         fontFamily = fontFamily,
