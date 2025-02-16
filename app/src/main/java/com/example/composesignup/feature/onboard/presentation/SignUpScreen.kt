@@ -58,8 +58,6 @@ fun SignUpScreen(
     action: (SignUpUiAction) -> Unit = viewModel.action,
     uiState: StateFlow<SignUpUiState> = viewModel.uiState
 ) {
-
-
     val scrollState = rememberScrollState()
     Column(
         modifier = modifier
